@@ -6,27 +6,28 @@
 #    By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/01/19 20:57:11 by tmielcza          #+#    #+#              #
-#    Updated: 2016/03/02 19:05:26 by tmielcza         ###   ########.fr        #
+#    Updated: 2016/03/03 20:36:24 by tmielcza         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
-includedir =	./include/
+includedir =	include/ \
+				glfw/build/include
 
-libdir =		glfw
+libdir =		glfw/build/lib
 
 libs =			glfw3
 
-frameworks =	OpenGL
+frameworks =	CoreVideo Cocoa IOKit OpenGL OpenCL Carbon
 
 SRCDIR = src/
 OBJDIR = obj/
 DEPDIR = dep/
-CXX = clang
+CXX = clang++
 NAME = parsys
 INCLUDE = $(addprefix -I,$(includedir))
 LIBS = $(addprefix -L,$(libdir)) $(addprefix -l,$(libs))
 FRAMEWORKS = $(addprefix -framework ,$(frameworks))
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -std=c++11
 FLAGS += -pedantic-errors #-Weverything
 #FLAGS += -O3 -march=native
 FLAGS += -g # Debug
@@ -35,12 +36,12 @@ CXXFLAGS = $(FLAGS) $(INCLUDE)
 SUBMODULES = glfw
 BUILDLIBS = glfw/build/lib/libglfw3.a
 
-vpath %.c $(SRCDIR)
+vpath %.cpp $(SRCDIR)
 
-SRC =	main.cpp \
+SRC =	main.cpp
 
-OBJ = $(SRC:%.c=$(OBJDIR)/%.o)
-DEP = $(SRC:%.c=$(DEPDIR)/%.d)
+OBJ = $(SRC:%.cpp=$(OBJDIR)/%.o)
+DEP = $(SRC:%.cpp=$(DEPDIR)/%.d)
 
 .SECONDARY: $(OBJ)
 
@@ -50,13 +51,13 @@ all : $(DEP) $(NAME)
 
 -include $(DEP)
 
-$(OBJDIR)/%.o : %.c | $(OBJDIR)
+$(OBJDIR)/%.o : %.cpp | $(OBJDIR)
 	@printf "\e[1;32mCompiling $<...\e[0m\n"
-	@$(CC) $(CFLAGS) -c -o $@ $<
+	@$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-$(DEPDIR)/%.d : %.c | $(SUBMODULES) $(DEPDIR)
+$(DEPDIR)/%.d : %.cpp | $(SUBMODULES) $(DEPDIR)
 	@printf "\e[1;34mGenerating $< dependencies...\n\e[0m"
-	@$(CC) $(CFLAGS) -MM $< -MT $(OBJDIR)/$*.o -MF $@
+	@$(CXX) $(CXXFLAGS) -MM $< -MT $(OBJDIR)/$*.o -MF $@
 
 $(OBJDIR) :
 	@mkdir -p $@
@@ -65,7 +66,7 @@ $(DEPDIR) :
 	@mkdir -p $@
 
 $(NAME) : $(BUILDLIBS) $(OBJ)
-	@$(CC) -o $@ $^ $(FLAGS) $(LIBS) $(FRAMEWORKS)
+	@$(CXX) -o $@ $^ $(FLAGS) $(LIBS) $(FRAMEWORKS)
 	@echo "$@ : Done!"
 
 $(SUBMODULES) :
