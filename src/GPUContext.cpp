@@ -6,40 +6,45 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 22:33:08 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/03 23:21:55 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/04 19:36:29 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 #include "GPUContext.hpp"
 
-cl::Context		*GPUContext::GetOpenCLContext(void)
+void		GPUContext::GetCLDevices(void)
 {
 	std::vector<cl::Platform>			platforms;
-	std::vector<cl::Device>				devices;
-	std::string							extentions;
-	cl::Context							*context;
 	cl_int								errcode;
-	CGLContextObj						kCGLContext = CGLGetCurrentContext();
-	CGLShareGroupObj					sharegroup = CGLGetShareGroup(kCGLContext);
+	std::string							extentions;
 
 	errcode = 0;
 	cl::Platform::get(&platforms);
-	if (platforms[0].getDevices(CL_DEVICE_TYPE_GPU, &devices) != CL_SUCCESS)
+	if (platforms[0].getDevices(CL_DEVICE_TYPE_GPU, &this->clDevices) != CL_SUCCESS)
 	{
 		printf("Your platform does not have any GPU. Sorry.\n");
 		throw std::exception();
 	}
-	devices[0].getInfo(CL_DEVICE_EXTENSIONS, &extentions);
+	this->clDevices[0].getInfo(CL_DEVICE_EXTENSIONS, &extentions);
 	if (extentions.find("cl_APPLE_gl_sharing") == std::string::npos)
 	{
 		printf("Your GPU does not support sharing extention. Sorry.\n");
 		throw std::exception();
 	}
+}
+
+cl::Context		*GPUContext::GetOpenCLContext(void)
+{
+	cl::Context							*context;
+	cl_int								errcode;
+	CGLContextObj						kCGLContext = CGLGetCurrentContext();
+	CGLShareGroupObj					sharegroup = CGLGetShareGroup(kCGLContext);
+
 	cl_context_properties				properties[] {
 		CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE,
 			(cl_context_properties)sharegroup, 0
 			};
-	context = new cl::Context(devices, properties, NULL, NULL, &errcode);
+	context = new cl::Context(this->clDevices, properties, NULL, NULL, &errcode);
 	if (errcode != CL_SUCCESS)
 	{
 		printf("Error : %d\n", errcode);
@@ -74,8 +79,11 @@ GLFWwindow		*GPUContext::GetGLFWWindow(void)
 	return (win);
 }
 
-GPUContext::GPUContext() : glfwWindow(GetGLFWWindow()), clContext(GetOpenCLContext())
+GPUContext::GPUContext()
 {
+	this->GetCLDevices();
+	this->glfwWindow = GetGLFWWindow();
+	this->clContext = GetOpenCLContext();
 }
 
 GPUContext::~GPUContext()
@@ -83,4 +91,24 @@ GPUContext::~GPUContext()
 	delete this->clContext;
 	glfwDestroyWindow(this->glfwWindow);
 	glfwTerminate();
+}
+
+cl::Context	const	&GPUContext::getCLContext()
+{
+	return (*this->clContext);
+}
+
+cl::Device const	&GPUContext::getCLDevice()
+{
+	return (this->clDevices[0]);
+}
+
+std::vector<cl::Device> const	&GPUContext::getCLDevices()
+{
+	return (this->clDevices);
+}
+
+GLFWwindow	const	&GPUContext::getGLFWContext()
+{
+	return (*this->glfwWindow);
 }

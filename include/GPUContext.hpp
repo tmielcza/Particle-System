@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 22:54:14 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/03 23:21:05 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/04 19:36:03 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -24,15 +24,22 @@
 class GPUContext
 {
 private:
-	GLFWwindow		*glfwWindow;
-	cl::Context		*clContext;
+	std::vector<cl::Device>	clDevices;
+	GLFWwindow				*glfwWindow;
+	cl::Context				*clContext;
 
-	cl::Context		*GetOpenCLContext(void);
-	GLFWwindow		*GetGLFWWindow(void);
+	cl::Context					*GetOpenCLContext(void);
+	void						GetCLDevices(void);
+	GLFWwindow					*GetGLFWWindow(void);
 
 public:
 					GPUContext();
 					~GPUContext();
+
+	cl::Context	const	&getCLContext();
+	cl::Device const	&getCLDevice();
+	std::vector<cl::Device> const	&getCLDevices();
+	GLFWwindow	const	&getGLFWContext();
 };
 
 #endif
