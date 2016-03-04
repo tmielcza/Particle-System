@@ -6,7 +6,7 @@
 #    By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/01/19 20:57:11 by tmielcza          #+#    #+#              #
-#    Updated: 2016/03/03 20:36:24 by tmielcza         ###   ########.fr        #
+#    Updated: 2016/03/03 22:54:31 by tmielcza         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -38,7 +38,8 @@ BUILDLIBS = glfw/build/lib/libglfw3.a
 
 vpath %.cpp $(SRCDIR)
 
-SRC =	main.cpp
+SRC =	main.cpp \
+		GPUContext.cpp
 
 OBJ = $(SRC:%.cpp=$(OBJDIR)/%.o)
 DEP = $(SRC:%.cpp=$(DEPDIR)/%.d)

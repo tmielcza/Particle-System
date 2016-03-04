@@ -6,14 +6,14 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 18:25:35 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/03 20:30:55 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/03 23:17:22 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
-#include "OpenCLWrapper.hpp"
+#include "GPUContext.hpp"
 
 int		main(void)
 {
-	OpenCLWrapper::Init();
+	GPUContext context;
 	return (0);
 }
