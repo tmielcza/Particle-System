@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:11:08 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/04 19:14:18 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/05 00:43:36 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -61,6 +61,9 @@ class ParticleSystem
 public:
 			ParticleSystem(GPUContext &context, int size, std::string source);
 			~ParticleSystem();
+
+	void	ComputeParticles(void);
+	void	RenderParticles(void);
 
 private:
 	GLBuffer<Vector3>	glBuff;

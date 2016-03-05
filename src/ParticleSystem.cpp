@@ -6,10 +6,11 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:41:07 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/04 21:47:07 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/05 01:12:21 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
+#include <vector>
 #include "ParticleSystem.hpp"
 
 inline void CheckCLErrorStatus(cl_int error, std::string error_msg)
@@ -41,6 +42,7 @@ ParticleSystem::ParticleSystem(GPUContext &context, int size, std::string source
 	{
 		this->program.getBuildInfo(context.getCLDevice(), CL_PROGRAM_BUILD_LOG, &err_str);
 		printf("Build error:\n%s", err_str.c_str());
+		throw std::exception();
 	}
 	this->kernel = cl::Kernel(this->program, "add", &err);
 	CheckCLErrorStatus(err, "Can't get CL Kernel.");
@@ -51,26 +53,33 @@ ParticleSystem::ParticleSystem(GPUContext &context, int size, std::string source
 	event = add(cl::EnqueueArgs(this->queue, cl::NDRange(size)), *this->clBuff);
 	event.wait();
 
-/*
-	err = this->kernel.setArg(0, *this->clBuff);
-	CheckCLErrorStatus(err, "Can't get CL Kernel 2.");
-	err = this->queue.enqueueNDRangeKernel(
-		this->kernel,
-		cl::NullRange,
-		cl::NDRange(size),
-		cl::NDRange(1, 1),
-		NULL,
-		&event);
-	CheckCLErrorStatus(err, "ComamndQueue::enqueueNDRangeKernel()");
-	event.wait();
-*/
 	err = this->queue.enqueueReadBuffer(*this->clBuff, false, 0, sizeof(buf), buf, NULL, &event);
 	CheckCLErrorStatus(err, "Can't read buffer.");
-
+	event.wait();
 	err = this->queue.flush();
 	for (int i = 0; i < 10; i++)
 		printf("%f %f %f\n", buf[3 * i], buf[3 * i + 1], buf[3 * i + 2]);
-//	CheckCLErrorStatus(err, "Can't make CL Kernel.");
+	this->ComputeParticles();
+}
+
+void		ParticleSystem::ComputeParticles(void)
+{
+//	glFlush();
+
+//	cl_int						err;
+	std::vector<cl::Memory>		test = {*this->clBuff};
+
+	this->queue.enqueueAcquireGLObjects(&test, NULL, NULL);
+
+	// DO SOME SHIT
+
+	this->queue.enqueueReleaseGLObjects(&test, NULL, NULL);
+	this->queue.flush();
+}
+
+void		ParticleSystem::RenderParticles(void)
+{
+	
 }
 
 ParticleSystem::~ParticleSystem()
