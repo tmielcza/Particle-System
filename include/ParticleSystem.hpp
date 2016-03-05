@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:11:08 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/05 00:43:36 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/05 02:31:20 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -14,6 +14,7 @@
 # define PARTICLESYSYEM_HPP
 
 # include "GPUContext.hpp"
+# include "GLProgram.hpp"
 
 template<typename T>
 class GLBuffer
