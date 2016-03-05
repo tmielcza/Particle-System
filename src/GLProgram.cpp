@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/05 02:18:42 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/05 03:15:25 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/05 03:21:53 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -61,6 +61,11 @@ GLProgram::~GLProgram()
 	glDeleteProgram(this->program);
 	glDeleteShader(this->vertShader);
 	glDeleteShader(this->fragShader);
+}
+
+void		GLProgram::Use(void)
+{
+	glUseProgram(this->program);
 }
 
 template<>

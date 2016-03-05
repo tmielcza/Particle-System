@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/05 01:32:00 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/05 03:17:02 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/05 03:21:34 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -34,6 +34,8 @@ private:
 public:
 	GLProgram(std::string vertex, std::string fragment);
 	~GLProgram();
+
+	void		Use(void);
 
 	template<typename T>
 	void		SetParam(std::string name, T value)
