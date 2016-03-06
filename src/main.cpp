@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 18:25:35 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/06 01:23:14 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/06 02:06:55 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -29,10 +29,10 @@ int		main(void)
 		"\n"
 		"kernel\n"
 		"void	update(const int num, global float4 * const restrict a,\n"
-		"global float4 * const restrict velocities)\n"
+		"global float4 * const restrict velocities, const float4 center)\n"
 		"{\n"
 		"unsigned int idx = get_global_id(0);\n"
-		"float4 gravity = (float4)(0, 0, 0, 1) - a[idx];\n"
+		"float4 gravity = center - a[idx];\n"
 		"gravity = normalize(gravity);\n"
 		"gravity = gravity * 0.001f;\n"
 		"velocities[idx] += gravity;\n"
@@ -42,22 +42,22 @@ int		main(void)
 
 	try
 	{
-		auto ps = ParticleSystem(context, 100, str);
+		auto ps = ParticleSystem(context, 1000000, str);
 //		ps.ComputeParticles();
 		ps.RenderParticles();
 		while (1) {
 			glfwPollEvents();
 			ps.ComputeParticles();
 			ps.RenderParticles();
-/*
-			if (glfwGetMouseButton(context.getGLFWWindow(), 0) == GLFW_PRESS)
+			if (glfwGetMouseButton(context.getGLFWContext(), 0) == GLFW_PRESS)
 			{
 				double	x, y;
 
-				glfwGetCursorPos(context.getGLFWWindow(), &x, &y);
-				ps.SetGravityCenter({x + 0.5f, y + 0.5f, 0.0f, 1.0f});
+				glfwGetCursorPos(context.getGLFWContext(), &x, &y);
+				x /= 640.f;
+				y /= 480.f;
+				ps.SetGravityCenter({((float)x - 0.5f) * 2.f, (1.f - (float)y - 0.5f) * 2.f, 0.0f, 1.0f});
 			}
-*/
 		}
 	}
 	catch (std::exception &e)

@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:41:07 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/06 01:12:02 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/06 02:07:16 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -27,7 +27,8 @@ ParticleSystem::ParticleSystem(GPUContext &context, int size, std::string source
 	glBuffVelocities(GLBuffer::CreateGLBuffer<float>(4, size)),
 	context(context),
 	size(size),
-	vao(new GLVAO(size, this->glBuff))
+	vao(new GLVAO(size, this->glBuff)),
+	gravityCenter(0, 0, 0, 1)
 {
 	cl_int		err;
 	std::string	err_str;
@@ -95,8 +96,10 @@ void		ParticleSystem::ComputeParticles(void)
 	// DO SOME SHIT
 	cl::Event	event;
 
-	auto update = cl::make_kernel<cl_int, cl::BufferGL, cl::BufferGL>(cl::Kernel(this->program,"update"));
-	event = update(cl::EnqueueArgs(this->queue, cl::NDRange(this->size)), this->size, *this->clBuff, *this->clBuffVelocities);
+	cl_float4	f {{this->gravityCenter.x, this->gravityCenter.y, this->gravityCenter.z, 1.0}};
+//	cl_float4	f = *(cl_float4 *)(&this->gravityCenter);
+	auto update = cl::make_kernel<cl_int, cl::BufferGL, cl::BufferGL, cl_float4>(cl::Kernel(this->program,"update"));
+	event = update(cl::EnqueueArgs(this->queue, cl::NDRange(this->size)), this->size, *this->clBuff, *this->clBuffVelocities, f);
 	event.wait();
 
 	this->queue.enqueueReleaseGLObjects(&test, NULL, NULL);
@@ -105,11 +108,19 @@ void		ParticleSystem::ComputeParticles(void)
 
 void		ParticleSystem::RenderParticles(void)
 {
+	// A foutre ailleurs !!
+	glDisable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glPointSize(10.f);
+
+	glPointSize(1.f);
 	this->vao->BindWithProgram(*this->glProgram, "pos");
 	this->vao->Draw(*this->glProgram);
 	glfwSwapBuffers(this->context.getGLFWContext());
+}
+
+void		ParticleSystem::SetGravityCenter(Vector4 center)
+{
+	this->gravityCenter = center;
 }
 
 ParticleSystem::~ParticleSystem()

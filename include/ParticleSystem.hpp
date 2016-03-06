@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:11:08 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/06 00:52:53 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/06 01:46:25 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -20,6 +20,8 @@
 struct Vector4
 {
 	float x, y, z, w;
+
+	Vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {}
 };
 
 class ParticleSystem
@@ -30,6 +32,7 @@ public:
 
 	void	ComputeParticles(void);
 	void	RenderParticles(void);
+	void	SetGravityCenter(Vector4 center);
 
 private:
 	GLBuffer			*glBuff;
@@ -43,6 +46,7 @@ private:
 	GPUContext			&context;
 	int					size;
 	GLVAO				*vao;
+	Vector4				gravityCenter;
 
 	void	Initialize(void);
 };
