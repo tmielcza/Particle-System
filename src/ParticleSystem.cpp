@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:41:07 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/06 02:07:16 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/06 15:37:04 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -57,14 +57,21 @@ ParticleSystem::ParticleSystem(GPUContext &context, int size, std::string source
 	std::string	vert =
 		"#version 400\n"
 		"layout(location = 0) in vec4 pos;\n"
+		"out vec4 VertexPos;\n"
 		"void main () {\n"
-		"	gl_Position = pos;\n"
+		"	gl_Position = pos * 0.1f;\n"
+		"	VertexPos = pos;\n"
 		"}";
 	std::string frag =
 		"#version 400\n"
+		"uniform vec4 gcenter;\n"
+		"in vec4 VertexPos;\n"
 		"out vec4 color;\n"
 		"void main () {\n"
-		"  color = vec4 (0.5, 0.0, 0.5, 1.0);\n"
+		"	vec4 color1 = vec4(0.5, 0.0, 0.5, 1.f);\n"
+		"	vec4 color2 = vec4(1.0, 1.0, 1.0, 1.f);\n"
+		"	color = mix(color1, color2, length(VertexPos - gcenter));"
+//		"	color *= (1.0f - length(VertexPos - gcenter)) * 10.f;"
 		"}";
 	this->glProgram = new GLProgram(vert, frag);
 
@@ -109,11 +116,12 @@ void		ParticleSystem::ComputeParticles(void)
 void		ParticleSystem::RenderParticles(void)
 {
 	// A foutre ailleurs !!
-	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glPointSize(1.f);
 	this->vao->BindWithProgram(*this->glProgram, "pos");
+	this->glProgram->SetParam<float>("gcenter", (float *)&this->gravityCenter, 4);
 	this->vao->Draw(*this->glProgram);
 	glfwSwapBuffers(this->context.getGLFWContext());
 }

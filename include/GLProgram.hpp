@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/05 01:32:00 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/05 20:58:42 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/06 15:15:19 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -42,15 +42,16 @@ public:
 	GLuint		GetArgLocation(std::string argName);
 
 	template<typename T>
-	void		SetParam(std::string name, T value)
+	void		SetParam(std::string name, T *value, int nb)
 		{
 			(void)name;
 			(void)value;
+			(void)nb;
 			fprintf(stderr, "Can't set this type of parameter\n");
 			throw std::exception();
 		}
 };
 
-template<> void		GLProgram::SetParam(std::string name, float value);
+template<> void		GLProgram::SetParam(std::string name, float *floats, int nb);
 
 #endif
