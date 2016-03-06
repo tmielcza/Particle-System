@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/05 02:18:42 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/05 03:21:53 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/06 00:11:19 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -25,6 +25,7 @@ void	GLProgram::CheckShaderCompilation(GLuint shaderId)
 		glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &maxLen);
 		errStr.resize(maxLen);
 		glGetShaderInfoLog(shaderId, maxLen, &maxLen, &errStr[0]);
+		printf("Can't compile shader:\n%s", errStr.c_str());
 		glDeleteShader(shaderId);
 		throw std::exception();
 	}
@@ -63,9 +64,24 @@ GLProgram::~GLProgram()
 	glDeleteShader(this->fragShader);
 }
 
-void		GLProgram::Use(void)
+void		GLProgram::Bind(void)
 {
 	glUseProgram(this->program);
+}
+
+void		GLProgram::Unbind(void)
+{
+	glUseProgram(0);
+}
+
+GLuint		GLProgram::getId(void)
+{
+	return (this->program);
+}
+
+GLuint		GLProgram::GetArgLocation(std::string argName)
+{
+	return (glGetAttribLocation(this->getId(), argName.c_str()));
 }
 
 template<>

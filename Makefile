@@ -6,7 +6,7 @@
 #    By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/01/19 20:57:11 by tmielcza          #+#    #+#              #
-#    Updated: 2016/03/05 02:19:24 by tmielcza         ###   ########.fr        #
+#    Updated: 2016/03/05 20:45:33 by tmielcza         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -30,7 +30,7 @@ FRAMEWORKS = $(addprefix -framework ,$(frameworks))
 FLAGS = -Wall -Wextra -Werror -std=c++11
 FLAGS += -pedantic-errors #-Weverything
 #FLAGS += -O3 -march=native
-FLAGS += -g # Debug
+FLAGS += -g -DDEBUG=ON # Debug
 CXXFLAGS = $(FLAGS) $(INCLUDE)
 
 SUBMODULES = glfw
@@ -41,7 +41,8 @@ vpath %.cpp $(SRCDIR)
 SRC =	main.cpp \
 		GPUContext.cpp \
 		ParticleSystem.cpp \
-		GLProgram.cpp
+		GLProgram.cpp \
+		GLVAO.cpp
 
 OBJ = $(SRC:%.cpp=$(OBJDIR)/%.o)
 DEP = $(SRC:%.cpp=$(DEPDIR)/%.d)

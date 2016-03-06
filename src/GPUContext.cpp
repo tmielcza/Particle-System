@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 22:33:08 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/04 19:36:29 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/05 17:38:37 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -108,7 +108,7 @@ std::vector<cl::Device> const	&GPUContext::getCLDevices()
 	return (this->clDevices);
 }
 
-GLFWwindow	const	&GPUContext::getGLFWContext()
+GLFWwindow				*GPUContext::getGLFWContext()
 {
-	return (*this->glfwWindow);
+	return (this->glfwWindow);
 }

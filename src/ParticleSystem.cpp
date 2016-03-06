@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:41:07 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/05 01:12:21 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/06 01:12:02 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -23,14 +23,20 @@ inline void CheckCLErrorStatus(cl_int error, std::string error_msg)
 }
 
 ParticleSystem::ParticleSystem(GPUContext &context, int size, std::string source) :
-	glBuff(size)
+	glBuff(GLBuffer::CreateGLBuffer<float>(4, size)),
+	glBuffVelocities(GLBuffer::CreateGLBuffer<float>(4, size)),
+	context(context),
+	size(size),
+	vao(new GLVAO(size, this->glBuff))
 {
 	cl_int		err;
 	std::string	err_str;
-	float		buf[3 * 10];
 
 	this->clBuff = new cl::BufferGL(context.getCLContext(), CL_MEM_READ_WRITE,
-									this->glBuff.getId(), &err);
+									this->glBuff->getId(), &err);
+	CheckCLErrorStatus(err, "Can't create CL BufferGL.");
+	this->clBuffVelocities = new cl::BufferGL(context.getCLContext(), CL_MEM_READ_WRITE,
+									this->glBuffVelocities->getId(), &err);
 	CheckCLErrorStatus(err, "Can't create CL BufferGL.");
 	this->queue = cl::CommandQueue(context.getCLContext(), context.getCLDevice(),
 								   0, &err);
@@ -47,19 +53,34 @@ ParticleSystem::ParticleSystem(GPUContext &context, int size, std::string source
 	this->kernel = cl::Kernel(this->program, "add", &err);
 	CheckCLErrorStatus(err, "Can't get CL Kernel.");
 
-	cl::Event event;
+	std::string	vert =
+		"#version 400\n"
+		"layout(location = 0) in vec4 pos;\n"
+		"void main () {\n"
+		"	gl_Position = pos;\n"
+		"}";
+	std::string frag =
+		"#version 400\n"
+		"out vec4 color;\n"
+		"void main () {\n"
+		"  color = vec4 (0.5, 0.0, 0.5, 1.0);\n"
+		"}";
+	this->glProgram = new GLProgram(vert, frag);
 
-	auto add = cl::make_kernel<cl::BufferGL>(this->kernel);
-	event = add(cl::EnqueueArgs(this->queue, cl::NDRange(size)), *this->clBuff);
-	event.wait();
+	Initialize();
+}
 
-	err = this->queue.enqueueReadBuffer(*this->clBuff, false, 0, sizeof(buf), buf, NULL, &event);
-	CheckCLErrorStatus(err, "Can't read buffer.");
+void		ParticleSystem::Initialize(void)
+{
+	std::vector<cl::Memory>		test = {*this->clBuff};
+	cl::Event					event;
+
+	this->queue.enqueueAcquireGLObjects(&test, NULL, NULL);
+	auto init = cl::make_kernel<cl_int, cl::BufferGL>(this->kernel);
+	event = init(cl::EnqueueArgs(this->queue, cl::NDRange(this->size)), this->size, *this->clBuff);
 	event.wait();
-	err = this->queue.flush();
-	for (int i = 0; i < 10; i++)
-		printf("%f %f %f\n", buf[3 * i], buf[3 * i + 1], buf[3 * i + 2]);
-	this->ComputeParticles();
+	this->queue.enqueueReleaseGLObjects(&test, NULL, NULL);
+	this->queue.flush();
 }
 
 void		ParticleSystem::ComputeParticles(void)
@@ -67,11 +88,16 @@ void		ParticleSystem::ComputeParticles(void)
 //	glFlush();
 
 //	cl_int						err;
-	std::vector<cl::Memory>		test = {*this->clBuff};
+	std::vector<cl::Memory>		test = {*this->clBuff, *this->clBuffVelocities};
 
 	this->queue.enqueueAcquireGLObjects(&test, NULL, NULL);
 
 	// DO SOME SHIT
+	cl::Event	event;
+
+	auto update = cl::make_kernel<cl_int, cl::BufferGL, cl::BufferGL>(cl::Kernel(this->program,"update"));
+	event = update(cl::EnqueueArgs(this->queue, cl::NDRange(this->size)), this->size, *this->clBuff, *this->clBuffVelocities);
+	event.wait();
 
 	this->queue.enqueueReleaseGLObjects(&test, NULL, NULL);
 	this->queue.flush();
@@ -79,7 +105,11 @@ void		ParticleSystem::ComputeParticles(void)
 
 void		ParticleSystem::RenderParticles(void)
 {
-	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glPointSize(10.f);
+	this->vao->BindWithProgram(*this->glProgram, "pos");
+	this->vao->Draw(*this->glProgram);
+	glfwSwapBuffers(this->context.getGLFWContext());
 }
 
 ParticleSystem::~ParticleSystem()

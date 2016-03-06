@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/05 01:32:00 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/05 03:21:34 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/05 20:58:42 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -35,7 +35,11 @@ public:
 	GLProgram(std::string vertex, std::string fragment);
 	~GLProgram();
 
-	void		Use(void);
+	void		Bind(void);
+	void		Unbind(void);
+	GLuint		getId(void);
+
+	GLuint		GetArgLocation(std::string argName);
 
 	template<typename T>
 	void		SetParam(std::string name, T value)
