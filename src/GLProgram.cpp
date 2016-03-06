@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/05 02:18:42 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/06 15:16:09 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/06 17:57:54 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -91,7 +91,7 @@ void		GLProgram::SetParam(std::string name, float *floats, int nb)
 	switch (nb)
 	{
 	case 4:
-		glProgramUniform4fv(this->program, loc, nb, floats);
+		glProgramUniform4fv(this->program, loc, 1, floats);
 		break ;
 	default:
 		break ;

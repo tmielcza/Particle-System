@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 22:33:08 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/05 17:38:37 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/06 16:48:36 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -68,7 +68,7 @@ GLFWwindow		*GPUContext::GetGLFWWindow(void)
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-	win = glfwCreateWindow(640, 480, "ParSys", NULL, NULL);
+	win = glfwCreateWindow(1920, 1080, "ParSys", NULL, NULL);
 	glfwMakeContextCurrent(win);
 //		glfwSetCursorPosCallback(win, update_cursor_position);
 //		glfwSetMouseButtonCallback(win, update_mouse_click);

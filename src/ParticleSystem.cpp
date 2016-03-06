@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:41:07 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/06 15:37:04 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/06 18:28:12 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -70,8 +70,7 @@ ParticleSystem::ParticleSystem(GPUContext &context, int size, std::string source
 		"void main () {\n"
 		"	vec4 color1 = vec4(0.5, 0.0, 0.5, 1.f);\n"
 		"	vec4 color2 = vec4(1.0, 1.0, 1.0, 1.f);\n"
-		"	color = mix(color1, color2, length(VertexPos - gcenter));"
-//		"	color *= (1.0f - length(VertexPos - gcenter)) * 10.f;"
+		"	color = mix(color1, color2, 1 / pow(length(VertexPos - gcenter) * 14.0, 1.0));\n"
 		"}";
 	this->glProgram = new GLProgram(vert, frag);
 
@@ -116,6 +115,7 @@ void		ParticleSystem::ComputeParticles(void)
 void		ParticleSystem::RenderParticles(void)
 {
 	// A foutre ailleurs !!
+	glClearColor(0, 0, 0, 0.002f);
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -129,6 +129,15 @@ void		ParticleSystem::RenderParticles(void)
 void		ParticleSystem::SetGravityCenter(Vector4 center)
 {
 	this->gravityCenter = center;
+}
+
+std::string	ParticleSystem::ReadShader(std::string name)
+{
+	std::ifstream		file(name);
+	std::stringstream	ss;
+
+	ss << file.rdbuf();
+	return (ss.str());
 }
 
 ParticleSystem::~ParticleSystem()

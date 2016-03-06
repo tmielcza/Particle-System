@@ -6,13 +6,16 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:11:08 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/06 15:10:28 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/06 18:26:42 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 #ifndef PARTICLESYSYEM_HPP
 # define PARTICLESYSYEM_HPP
 
+#include <string>
+#include <fstream>
+#include <sstream>
 # include "GPUContext.hpp"
 # include "GLProgram.hpp"
 # include "GLVAO.hpp"
@@ -33,6 +36,7 @@ public:
 	void	ComputeParticles(void);
 	void	RenderParticles(void);
 	void	SetGravityCenter(Vector4 center);
+	std::string	ReadShader(std::string name);
 
 private:
 	GLBuffer			*glBuff;

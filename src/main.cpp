@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 18:25:35 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/06 14:55:33 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/06 17:58:00 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -24,7 +24,7 @@ int		main(void)
 		"float x = (float)(idx % k) / (float)k * 0.5f;\n"
 		"float y = (float)((idx / k) % k) / (float)k * 0.5f;\n"
 		"float z = (float)(idx / (k * k)) / (float)k * 0.5f;\n"
-		"float4 pos = (float4)(x, y, z, 1.0);\n"
+		"float4 pos = (float4)(x, y, z, 1.0) - (float4)(0.25, 0.25, 0.25, 0);\n"
 		"a[idx] = pos;}\n"
 		"\n"
 		"kernel\n"
@@ -32,11 +32,12 @@ int		main(void)
 		"global float4 * const restrict velocities, const float4 center)\n"
 		"{\n"
 		"unsigned int idx = get_global_id(0);\n"
+		"float4 origin = a[idx];\n"
 		"float4 gravity = center - a[idx];\n"
-		"gravity = normalize(gravity);\n"
-		"gravity = gravity * 0.001f;\n"
+		"gravity = normalize(gravity) * 0.002f;\n"
 		"velocities[idx] += gravity;\n"
-		"a[idx] += velocities[idx];}"
+		"a[idx] += velocities[idx];\n"
+		"}"
 		;
 	GPUContext context;
 
@@ -54,8 +55,8 @@ int		main(void)
 				double	x, y;
 
 				glfwGetCursorPos(context.getGLFWContext(), &x, &y);
-				x /= 640.f;
-				y /= 480.f;
+				x /= 1920.f;
+				y /= 1080.f;
 				ps.SetGravityCenter({((float)x - 0.5f) * 2.f, (1.f - (float)y - 0.5f) * 2.f, 0.0f, 1.0f});
 			}
 		}
