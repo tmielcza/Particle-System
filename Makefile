@@ -33,8 +33,9 @@ FLAGS += -pedantic-errors #-Weverything
 FLAGS += -g -DDEBUG=ON # Debug
 CXXFLAGS = $(FLAGS) $(INCLUDE)
 
-SUBMODULES = glfw
-BUILDLIBS = glfw/build/lib/libglfw3.a
+SUBMODULES = glfw/.git
+LIBGLFW = glfw/build/lib/libglfw3.a
+BUILDLIBS = $(LIBGLFW)
 
 vpath %.cpp $(SRCDIR)
 
@@ -55,11 +56,11 @@ all : $(DEP) $(NAME)
 
 -include $(DEP)
 
-$(OBJDIR)/%.o : %.cpp | $(OBJDIR)
+$(OBJDIR)/%.o : %.cpp | $(SUBMODULES) $(OBJDIR)
 	@printf "\e[1;32mCompiling $<...\e[0m\n"
 	@$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-$(DEPDIR)/%.d : %.cpp | $(SUBMODULES) $(DEPDIR)
+$(DEPDIR)/%.d : %.cpp | $(BUILDLIBS) $(SUBMODULES) $(DEPDIR)
 	@printf "\e[1;34mGenerating $< dependencies...\n\e[0m"
 	@$(CXX) $(CXXFLAGS) -MM $< -MT $(OBJDIR)/$*.o -MF $@
 
@@ -76,7 +77,7 @@ $(NAME) : $(BUILDLIBS) $(OBJ)
 $(SUBMODULES) :
 	@git submodule update --init --recursive
 
-glfw/build/lib/libglfw3.a : glfw
+$(LIBGLFW) : glfw/.git
 	@cd glfw && cmake . -DGLFW_USE_CHDIR=OFF -DCMAKE_INSTALL_PREFIX=./build \
 	-DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF \
 	&& make install
