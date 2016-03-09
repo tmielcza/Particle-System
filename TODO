@@ -2,12 +2,15 @@
 //Screen size
 		 -Get real size / Set viewport
 //Recenter particles
--Projection
--Sphere
+//Sphere
 -Zero gravity
 //Quit
 //Pass particules number
 -FPS Counter
 -Change starting disposition
 -Portability
+
+BONUS:
+
+-Projection
 -Sprites

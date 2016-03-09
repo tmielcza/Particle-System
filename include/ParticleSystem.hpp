@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:11:08 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/09 01:48:21 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/09 05:35:25 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -38,6 +38,7 @@ public:
 	void			RenderParticles(void);
 	void			SetGravityCenter(float x, float y, float z);
 	std::string		ReadFile(std::string name);
+	void			OnOff(void);
 
 private:
 	GLBuffer			*glBuff;
@@ -47,11 +48,13 @@ private:
 	cl::CommandQueue	queue;
 	cl::Program			program;
 	cl::Kernel			kernel;
+	cl::Kernel			kernelInitCube;
 	GLProgram			*glProgram;
 	GPUContext			&context;
 	int					size;
 	GLVAO				*vao;
 	Vector4				gravityCenter;
+	bool				run;
 
 	void	Initialize(void);
 };

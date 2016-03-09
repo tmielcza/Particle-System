@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 18:25:35 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/09 02:41:33 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/09 03:40:32 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -18,6 +18,7 @@ int		main(int ac, char **av)
 {
 	GPUContext	*context;
 	double		x, y;
+	bool		keyPressed = false;
 
 	if (ac != 2)
 	{
@@ -29,6 +30,14 @@ int		main(int ac, char **av)
 		auto ps = ParticleSystem(*context, atoi(av[1]));
 		while (glfwGetKey(context->getGLFWContext(), GLFW_KEY_ESCAPE) == GLFW_RELEASE) {
 			glfwPollEvents();
+			if (glfwGetKey(context->getGLFWContext(), GLFW_KEY_SPACE) == GLFW_PRESS) {
+				if (!keyPressed) {
+					keyPressed = true;
+					ps.OnOff();
+				}
+			} else if (keyPressed) {
+				keyPressed = false;
+			}
 			ps.ComputeParticles();
 			ps.RenderParticles();
 			if (glfwGetMouseButton(context->getGLFWContext(), 0) == GLFW_PRESS) {
