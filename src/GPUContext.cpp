@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 22:33:08 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/06 16:48:36 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/09 01:59:42 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -53,7 +53,7 @@ cl::Context		*GPUContext::GetOpenCLContext(void)
 	return (context);
 }
 
-GLFWwindow		*GPUContext::GetGLFWWindow(void)
+GLFWwindow		*GPUContext::GetGLFWWindow(int width, int height)
 {
 	GLFWwindow		*win;
 
@@ -68,21 +68,17 @@ GLFWwindow		*GPUContext::GetGLFWWindow(void)
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-	win = glfwCreateWindow(1920, 1080, "ParSys", NULL, NULL);
+	win = glfwCreateWindow(width, height, "ParSys", NULL, NULL);
 	glfwMakeContextCurrent(win);
-//		glfwSetCursorPosCallback(win, update_cursor_position);
-//		glfwSetMouseButtonCallback(win, update_mouse_click);
-//		glfwSetScrollCallback(win, update_mouse_wheel);
-//		get_input_manager_instance()->win = win;
 //		glEnable(GL_DEPTH_TEST);
 //		glDepthFunc(GL_LESS);
 	return (win);
 }
 
-GPUContext::GPUContext()
+GPUContext::GPUContext(int width, int height)
 {
 	this->GetCLDevices();
-	this->glfwWindow = GetGLFWWindow();
+	this->glfwWindow = GetGLFWWindow(width, height);
 	this->clContext = GetOpenCLContext();
 }
 
@@ -111,4 +107,11 @@ std::vector<cl::Device> const	&GPUContext::getCLDevices()
 GLFWwindow				*GPUContext::getGLFWContext()
 {
 	return (this->glfwWindow);
+}
+
+void				GPUContext::getCursorPos(double *x, double *y)
+{
+	glfwGetCursorPos(this->getGLFWContext(), x, y);
+	*x = ((*x / 1920.f) - 0.5f) * 2.f;
+	*y = (1.f - (*y / 1080.f) - 0.5f) * 2.f;
 }

@@ -6,64 +6,40 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 18:25:35 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/06 17:58:00 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/09 02:41:33 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
+#include <cstdlib>
 #include "GPUContext.hpp"
 #include "ParticleSystem.hpp"
 
-int		main(void)
+int		main(int ac, char **av)
 {
-	std::string str =
-		"kernel\n"
-		"void	add(const int num, global float4 * const restrict a)\n"
-		"{\n"
-		"unsigned int idx = get_global_id(0);\n"
-		"unsigned int k = ceil(cbrt((float)num));\n"
-		"float x = (float)(idx % k) / (float)k * 0.5f;\n"
-		"float y = (float)((idx / k) % k) / (float)k * 0.5f;\n"
-		"float z = (float)(idx / (k * k)) / (float)k * 0.5f;\n"
-		"float4 pos = (float4)(x, y, z, 1.0) - (float4)(0.25, 0.25, 0.25, 0);\n"
-		"a[idx] = pos;}\n"
-		"\n"
-		"kernel\n"
-		"void	update(const int num, global float4 * const restrict a,\n"
-		"global float4 * const restrict velocities, const float4 center)\n"
-		"{\n"
-		"unsigned int idx = get_global_id(0);\n"
-		"float4 origin = a[idx];\n"
-		"float4 gravity = center - a[idx];\n"
-		"gravity = normalize(gravity) * 0.002f;\n"
-		"velocities[idx] += gravity;\n"
-		"a[idx] += velocities[idx];\n"
-		"}"
-		;
-	GPUContext context;
+	GPUContext	*context;
+	double		x, y;
 
-	try
+	if (ac != 2)
 	{
-		auto ps = ParticleSystem(context, 1000000, str);
-//		ps.ComputeParticles();
-		ps.RenderParticles();
-		while (1) {
+		printf("Usage: %s <particles_number>\n", av[0]);
+		return (1);
+	}
+	context = new GPUContext(1920, 1080);
+	try {
+		auto ps = ParticleSystem(*context, atoi(av[1]));
+		while (glfwGetKey(context->getGLFWContext(), GLFW_KEY_ESCAPE) == GLFW_RELEASE) {
 			glfwPollEvents();
 			ps.ComputeParticles();
 			ps.RenderParticles();
-			if (glfwGetMouseButton(context.getGLFWContext(), 0) == GLFW_PRESS)
-			{
-				double	x, y;
-
-				glfwGetCursorPos(context.getGLFWContext(), &x, &y);
-				x /= 1920.f;
-				y /= 1080.f;
-				ps.SetGravityCenter({((float)x - 0.5f) * 2.f, (1.f - (float)y - 0.5f) * 2.f, 0.0f, 1.0f});
+			if (glfwGetMouseButton(context->getGLFWContext(), 0) == GLFW_PRESS) {
+				context->getCursorPos(&x, &y);
+				ps.SetGravityCenter(x, y, 0.f);
 			}
 		}
 	}
 	catch (std::exception &e)
 	{
-		printf("Boum\n");
+		printf("ERROR: %s\n", e.what());
 	}
 	return (0);
 }

@@ -6,16 +6,16 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:11:08 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/06 18:26:42 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/09 01:48:21 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 #ifndef PARTICLESYSYEM_HPP
 # define PARTICLESYSYEM_HPP
 
-#include <string>
-#include <fstream>
-#include <sstream>
+# include <string>
+# include <fstream>
+# include <sstream>
 # include "GPUContext.hpp"
 # include "GLProgram.hpp"
 # include "GLVAO.hpp"
@@ -30,13 +30,14 @@ struct Vector4
 class ParticleSystem
 {
 public:
-			ParticleSystem(GPUContext &context, int size, std::string source);
-			~ParticleSystem();
+					ParticleSystem() = delete;
+					ParticleSystem(GPUContext &context, int size);
+					~ParticleSystem();
 
-	void	ComputeParticles(void);
-	void	RenderParticles(void);
-	void	SetGravityCenter(Vector4 center);
-	std::string	ReadShader(std::string name);
+	void			ComputeParticles(void);
+	void			RenderParticles(void);
+	void			SetGravityCenter(float x, float y, float z);
+	std::string		ReadFile(std::string name);
 
 private:
 	GLBuffer			*glBuff;

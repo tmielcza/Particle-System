@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 22:54:14 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/05 20:46:05 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/09 01:58:26 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -39,16 +39,17 @@ private:
 
 	cl::Context					*GetOpenCLContext(void);
 	void						GetCLDevices(void);
-	GLFWwindow					*GetGLFWWindow(void);
+	GLFWwindow					*GetGLFWWindow(int width, int height);
 
 public:
-					GPUContext();
+					GPUContext(int width, int height);
 					~GPUContext();
 
 	cl::Context	const	&getCLContext();
 	cl::Device const	&getCLDevice();
 	std::vector<cl::Device> const	&getCLDevices();
 	GLFWwindow			*getGLFWContext();
+	void				getCursorPos(double *x, double *y);
 };
 
 #endif

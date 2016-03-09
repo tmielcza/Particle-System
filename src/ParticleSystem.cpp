@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:41:07 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/06 18:28:12 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/09 02:44:43 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -22,7 +22,7 @@ inline void CheckCLErrorStatus(cl_int error, std::string error_msg)
 	}
 }
 
-ParticleSystem::ParticleSystem(GPUContext &context, int size, std::string source) :
+ParticleSystem::ParticleSystem(GPUContext &context, int size) :
 	glBuff(GLBuffer::CreateGLBuffer<float>(4, size)),
 	glBuffVelocities(GLBuffer::CreateGLBuffer<float>(4, size)),
 	context(context),
@@ -30,6 +30,12 @@ ParticleSystem::ParticleSystem(GPUContext &context, int size, std::string source
 	vao(new GLVAO(size, this->glBuff)),
 	gravityCenter(0, 0, 0, 1)
 {
+	if (size <= 0 || size > 3e6)
+	{
+		throw std::runtime_error("Wrong particle number.");
+	}
+	std::string source = this->ReadFile("resources/particles.cl");
+
 	cl_int		err;
 	std::string	err_str;
 
@@ -54,24 +60,9 @@ ParticleSystem::ParticleSystem(GPUContext &context, int size, std::string source
 	this->kernel = cl::Kernel(this->program, "add", &err);
 	CheckCLErrorStatus(err, "Can't get CL Kernel.");
 
-	std::string	vert =
-		"#version 400\n"
-		"layout(location = 0) in vec4 pos;\n"
-		"out vec4 VertexPos;\n"
-		"void main () {\n"
-		"	gl_Position = pos * 0.1f;\n"
-		"	VertexPos = pos;\n"
-		"}";
-	std::string frag =
-		"#version 400\n"
-		"uniform vec4 gcenter;\n"
-		"in vec4 VertexPos;\n"
-		"out vec4 color;\n"
-		"void main () {\n"
-		"	vec4 color1 = vec4(0.5, 0.0, 0.5, 1.f);\n"
-		"	vec4 color2 = vec4(1.0, 1.0, 1.0, 1.f);\n"
-		"	color = mix(color1, color2, 1 / pow(length(VertexPos - gcenter) * 14.0, 1.0));\n"
-		"}";
+	std::string vert = this->ReadFile("resources/point_vert.gl");
+	std::string frag = this->ReadFile("resources/point_frag.gl");
+
 	this->glProgram = new GLProgram(vert, frag);
 
 	Initialize();
@@ -92,8 +83,6 @@ void		ParticleSystem::Initialize(void)
 
 void		ParticleSystem::ComputeParticles(void)
 {
-//	glFlush();
-
 //	cl_int						err;
 	std::vector<cl::Memory>		test = {*this->clBuff, *this->clBuffVelocities};
 
@@ -107,7 +96,6 @@ void		ParticleSystem::ComputeParticles(void)
 	auto update = cl::make_kernel<cl_int, cl::BufferGL, cl::BufferGL, cl_float4>(cl::Kernel(this->program,"update"));
 	event = update(cl::EnqueueArgs(this->queue, cl::NDRange(this->size)), this->size, *this->clBuff, *this->clBuffVelocities, f);
 	event.wait();
-
 	this->queue.enqueueReleaseGLObjects(&test, NULL, NULL);
 	this->queue.flush();
 }
@@ -118,20 +106,21 @@ void		ParticleSystem::RenderParticles(void)
 	glClearColor(0, 0, 0, 0.002f);
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glPointSize(1.0f);
 
-	glPointSize(1.f);
 	this->vao->BindWithProgram(*this->glProgram, "pos");
 	this->glProgram->SetParam<float>("gcenter", (float *)&this->gravityCenter, 4);
 	this->vao->Draw(*this->glProgram);
 	glfwSwapBuffers(this->context.getGLFWContext());
+	glFlush();
 }
 
-void		ParticleSystem::SetGravityCenter(Vector4 center)
+void		ParticleSystem::SetGravityCenter(float x, float y, float z)
 {
-	this->gravityCenter = center;
+	this->gravityCenter = Vector4(x, y, z, 1.0f);
 }
 
-std::string	ParticleSystem::ReadShader(std::string name)
+std::string	ParticleSystem::ReadFile(std::string name)
 {
 	std::ifstream		file(name);
 	std::stringstream	ss;

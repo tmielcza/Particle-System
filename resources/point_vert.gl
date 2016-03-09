@@ -1,0 +1,10 @@
+#version 400
+
+layout(location = 0) in vec4 pos;
+out vec4 VertexPos;
+
+void main ()
+{
+	gl_Position = pos * 0.1f;
+	VertexPos = pos;
+}

@@ -1,10 +1,13 @@
 -Big refacto
--Screen size
-// -Recenter particles
+//Screen size
+		 -Get real size / Set viewport
+//Recenter particles
 -Projection
 -Sphere
 -Zero gravity
--Quit
+//Quit
+//Pass particules number
 -FPS Counter
 -Change starting disposition
 -Portability
+-Sprites

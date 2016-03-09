@@ -1,0 +1,11 @@
+#version 400
+
+uniform vec4 gcenter;
+in vec4 VertexPos;
+out vec4 color;
+
+void main () {
+	vec4 color1 = vec4(1.0, 0.0, 0.0, 1.f);
+	vec4 color2 = vec4(1.0, 1.0, 1.0, 1.f);
+	color = mix(color1, color2, 1 / pow(length(VertexPos - gcenter) * 20.0, 0.5));
+}
