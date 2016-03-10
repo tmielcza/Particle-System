@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 22:54:14 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/09 01:58:26 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/10 00:34:49 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -36,6 +36,7 @@ private:
 	std::vector<cl::Device>	clDevices;
 	GLFWwindow				*glfwWindow;
 	cl::Context				*clContext;
+	int						width, height;
 
 	cl::Context					*GetOpenCLContext(void);
 	void						GetCLDevices(void);

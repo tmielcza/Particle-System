@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:11:08 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/09 05:35:25 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/10 00:03:25 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -39,6 +39,7 @@ public:
 	void			SetGravityCenter(float x, float y, float z);
 	std::string		ReadFile(std::string name);
 	void			OnOff(void);
+	void			ChangeInitForm(void);
 
 private:
 	GLBuffer			*glBuff;
@@ -55,8 +56,9 @@ private:
 	GLVAO				*vao;
 	Vector4				gravityCenter;
 	bool				run;
+	int					currentInitKernelId;
 
-	void	Initialize(void);
+	void	Initialize(cl::Kernel *ker);
 };
 
 #endif

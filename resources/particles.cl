@@ -22,7 +22,7 @@ void	sphere(const int num, global float4 * const restrict a)
 	unsigned int idx = get_global_id(0);
 	float4 pos = (float4)(rand(idx), rand(idx + 2.f), rand(idx + 4.f), 0.f);
 	pos = normalize(pos);
-	pos = pos * rand(idx + 8.f) * 0.5f;
+	pos = pos * (1.0f - (pow((rand(idx + 8.f) + 0.5f), 3))) * 0.25f;
 	pos.w = 1.f;
 	a[idx] = pos;
 }

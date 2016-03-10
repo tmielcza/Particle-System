@@ -1,16 +1,24 @@
--Big refacto
-//Screen size
-		 -Get real size / Set viewport
 //Recenter particles
 //Sphere
--Zero gravity
 //Quit
 //Pass particules number
--FPS Counter
--Change starting disposition
--Portability
+//Change starting disposition
+//Pause
+
+-Big refacto
+	-VAO/Program/Shaders
+//Screen size
+	-Get real screen size / Set viewport
+-Zero gravity
+-Time based rendering
+	-FPS Counter
+
+(-Portability)
 
 BONUS:
 
 -Projection
 -Sprites
+-Rotate
+-Better Colors
+-Volumetric ?

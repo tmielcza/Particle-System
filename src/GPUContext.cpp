@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 22:33:08 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/09 01:59:42 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/10 01:41:53 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -70,16 +70,26 @@ GLFWwindow		*GPUContext::GetGLFWWindow(int width, int height)
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	win = glfwCreateWindow(width, height, "ParSys", NULL, NULL);
 	glfwMakeContextCurrent(win);
-//		glEnable(GL_DEPTH_TEST);
-//		glDepthFunc(GL_LESS);
 	return (win);
 }
 
-GPUContext::GPUContext(int width, int height)
+GPUContext::GPUContext(int width, int height) :
+	width(width),
+	height(height)
 {
 	this->GetCLDevices();
 	this->glfwWindow = GetGLFWWindow(width, height);
 	this->clContext = GetOpenCLContext();
+
+// Ou tu veux que je foute ca ?
+	glClearColor(0, 0, 0, 0);
+//	glEnable(GL_DEPTH_TEST);
+	glPointSize(1.0f);
+	glEnable (GL_BLEND);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE);
+//	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//	glBlendFunc (GL_ONE, GL_SRC_ALPHA);
+//	glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 GPUContext::~GPUContext()
@@ -112,6 +122,6 @@ GLFWwindow				*GPUContext::getGLFWContext()
 void				GPUContext::getCursorPos(double *x, double *y)
 {
 	glfwGetCursorPos(this->getGLFWContext(), x, y);
-	*x = ((*x / 1920.f) - 0.5f) * 2.f;
-	*y = (1.f - (*y / 1080.f) - 0.5f) * 2.f;
+	*x = ((*x / this->width) - 0.5f) * 2.f;
+	*y = (1.f - (*y / this->height) - 0.5f) * 2.f;
 }
