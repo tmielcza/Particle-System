@@ -5,21 +5,25 @@
 //Change starting disposition
 //Pause
 //Zero gravity
+++Time based rendering
+	//DeltaTime
+	//FPS Counter
 
 -Big refacto
 	-VAO/Program/Shaders
 //Screen size
 	-Get real screen size / Set viewport
--Time based rendering
-	//DeltaTime
-	//FPS Counter
 
 (-Portability)
 
 BONUS:
 
 -Projection
+	-Matrices
+-Camera (move / rotate)
+-Particles emitter
+
 -Sprites
--Rotate
 -Better Colors
 -Volumetric ?
+-Multiple cravity centers
