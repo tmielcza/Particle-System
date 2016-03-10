@@ -4,14 +4,15 @@
 //Pass particules number
 //Change starting disposition
 //Pause
+//Zero gravity
 
 -Big refacto
 	-VAO/Program/Shaders
 //Screen size
 	-Get real screen size / Set viewport
--Zero gravity
 -Time based rendering
-	-FPS Counter
+	//DeltaTime
+	//FPS Counter
 
 (-Portability)
 

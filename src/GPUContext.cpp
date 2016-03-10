@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 22:33:08 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/10 01:41:53 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/10 18:46:15 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -86,8 +86,9 @@ GPUContext::GPUContext(int width, int height) :
 //	glEnable(GL_DEPTH_TEST);
 	glPointSize(1.0f);
 	glEnable (GL_BLEND);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE);
-//	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//	glBlendFunc (GL_ONE, GL_ONE);
+//	glBlendFunc (GL_SRC_ALPHA, GL_ONE);
 //	glBlendFunc (GL_ONE, GL_SRC_ALPHA);
 //	glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 }

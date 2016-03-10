@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 18:25:35 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/09 23:55:25 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/10 20:40:07 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -46,6 +46,8 @@ int		main(int ac, char **av)
 	GPUContext	*context;
 	double		x, y;
 	bool		isLaunched = false;
+	bool		hasGravity = true;
+	int			size;
 
 	if (ac != 2)
 	{
@@ -55,15 +57,23 @@ int		main(int ac, char **av)
 	context = new GPUContext(1920, 1080);
 	Key		keyPause(*context, GLFW_KEY_SPACE);
 	Key		keyChangeForm(*context, GLFW_KEY_F);
+	Key		keySetGravity(*context, GLFW_KEY_G);
+	float	delta;
+	size = atoi(av[1]);
 	try {
-		auto ps = ParticleSystem(*context, atoi(av[1]));
+		auto ps = ParticleSystem(*context, size);
 		while (glfwGetKey(context->getGLFWContext(), GLFW_KEY_ESCAPE) == GLFW_RELEASE) {
 			glfwPollEvents();
+			delta = ps.DeltaTime();
+			glfwSetWindowTitle(context->getGLFWContext(), std::to_string(1.f / delta).c_str());
 			if (keyPause.Pressed()) {
 				isLaunched = true;
 				ps.OnOff();
 			} if (keyChangeForm.Pressed() && !isLaunched) {
 				ps.ChangeInitForm();
+			} if (keySetGravity.Pressed()) {
+				hasGravity = !hasGravity;
+				ps.SetGravity(hasGravity);
 			}
 			ps.ComputeParticles();
 			ps.RenderParticles();

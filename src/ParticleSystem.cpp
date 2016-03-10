@@ -6,10 +6,11 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:41:07 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/10 00:36:43 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/10 21:00:11 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
+#include <chrono>
 #include <vector>
 #include "ParticleSystem.hpp"
 
@@ -29,7 +30,8 @@ ParticleSystem::ParticleSystem(GPUContext &context, int size) :
 	size(size),
 	vao(new GLVAO(size, this->glBuff)),
 	gravityCenter(0, 0, 0, 1),
-	run(false)
+	run(false),
+	hasGravity(true)
 {
 	if (size <= 0 || size > 3e6)
 	{
@@ -91,8 +93,14 @@ void		ParticleSystem::ComputeParticles(void)
 	if (this->run == false)
 		return ;
 	this->queue.enqueueAcquireGLObjects(&test, NULL, NULL);
-	auto update = cl::make_kernel<cl_int, cl::BufferGL, cl::BufferGL, cl_float4>(cl::Kernel(this->program,"update"));
-	event = update(cl::EnqueueArgs(this->queue, cl::NDRange(this->size)), this->size, *this->clBuff, *this->clBuffVelocities, f);
+	// Chopper les kernels a l'avance
+	if (this->hasGravity) {
+		auto update = cl::make_kernel<cl_int, cl::BufferGL, cl::BufferGL, cl_float4>(cl::Kernel(this->program,"update"));
+		event = update(cl::EnqueueArgs(this->queue, cl::NDRange(this->size)), this->size, *this->clBuff, *this->clBuffVelocities, f);
+	} else {
+		auto update = cl::make_kernel<cl_int, cl::BufferGL, cl::BufferGL>(cl::Kernel(this->program, "update_no_g"));
+		event = update(cl::EnqueueArgs(this->queue, cl::NDRange(this->size)), this->size, *this->clBuff, *this->clBuffVelocities);
+	}
 	event.wait();
 	this->queue.enqueueReleaseGLObjects(&test, NULL, NULL);
 	this->queue.flush();
@@ -140,4 +148,20 @@ void		ParticleSystem::ChangeInitForm(void)
 
 	this->currentInitKernelId = (this->currentInitKernelId + 1) % initKernels.size();
 	this->Initialize(initKernels[this->currentInitKernelId]);
+}
+
+void		ParticleSystem::SetGravity(bool position)
+{
+	this->hasGravity = position;
+}
+
+float		ParticleSystem::DeltaTime(void)
+{
+	static auto				last = std::chrono::system_clock::now();;
+	auto					time = std::chrono::system_clock::now();;
+	float					tmp;
+
+	tmp = std::chrono::duration_cast<std::chrono::microseconds>(time - last).count() / 1e6f;
+	last = time;
+	return (tmp);
 }

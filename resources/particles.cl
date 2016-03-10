@@ -38,3 +38,13 @@ void	update(const int num, global float4 * const restrict positions,
 	positions[idx] += vel * 0.01f;
 	velocities[idx] = 0.99f * vel + acceleration * 0.01f;
 }
+
+kernel
+void	update_no_g(const int num, global float4 * const restrict positions,
+					global float4 * const restrict velocities)
+{
+	unsigned int idx = get_global_id(0);
+	float4 vel = velocities[idx];
+	positions[idx] += vel * 0.01f;
+	velocities[idx] = 0.99f * vel;
+}
