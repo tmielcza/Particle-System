@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 18:25:35 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/10 20:40:07 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/11 01:37:25 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -41,6 +41,8 @@ private:
 	bool				isPressed;
 };
 
+#include <Matrix.hpp>
+
 int		main(int ac, char **av)
 {
 	GPUContext	*context;
@@ -48,7 +50,11 @@ int		main(int ac, char **av)
 	bool		isLaunched = false;
 	bool		hasGravity = true;
 	int			size;
+	Matrix<4,4>	mat;
+	Matrix<1,4>	mat2;
 
+	mat = mat * mat2;
+	mat = Matrix<4,4>::Identity();
 	if (ac != 2)
 	{
 		printf("Usage: %s <particles_number>\n", av[0]);
