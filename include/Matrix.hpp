@@ -6,17 +6,37 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/11 00:17:42 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/11 01:52:41 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/11 19:57:55 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
+
+#pragma once
 
 #include <cmath>
 
 template<size_t X, size_t Y>
 class Matrix
 {
+//protected:
+
 public:
+
 	float	data[Y][X];
+
+/*
+	Matrix(const float a[Y][X])
+	{
+		for (size_t y = 0; y < Y; y++) {
+			for (size_t x = 0; x < Y; x++) {
+				this->data[y][x] = a[y][x];
+			}
+		}
+	}
+
+	Matrix()
+	{
+	}
+*/
 
 	float		&Get(size_t x, size_t y)
 	{
@@ -26,7 +46,7 @@ public:
 	template<size_t XX, size_t YY>
 	Matrix<X, Y>	operator*(Matrix<XX, YY> &rhs)
 	{
-		Matrix		ret;
+		Matrix<X, Y>	ret;
 
 		static_assert (X == YY, "A width must match B height.");
 		for (size_t y = 0; y < Y; y++) {
@@ -112,5 +132,22 @@ public:
 		ret.data[2][1] = y * z * (1 - c) + x * s;
 		ret.data[2][2] = (z * z) + (1 - (z * z)) * c;
 		return (ret);
+	}
+};
+
+template<size_t X>
+class	Vector : public Matrix<1, X>
+{
+public:
+
+	Vector() {}
+
+	Vector<3>(float x, float y, float z) : Matrix<1, X>::Matrix {{{x}, {y}, {z}}}
+	{
+	}
+
+	float		&Get(size_t x)
+	{
+		return (this->data[0][x]);
 	}
 };

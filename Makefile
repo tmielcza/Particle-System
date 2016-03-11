@@ -6,7 +6,7 @@
 #    By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/01/19 20:57:11 by tmielcza          #+#    #+#              #
-#    Updated: 2016/03/11 00:32:11 by tmielcza         ###   ########.fr        #
+#    Updated: 2016/03/11 17:12:37 by tmielcza         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -43,7 +43,8 @@ SRC =	main.cpp \
 		GPUContext.cpp \
 		ParticleSystem.cpp \
 		GLProgram.cpp \
-		GLVAO.cpp
+		GLVAO.cpp \
+		Camera.cpp
 
 OBJ = $(SRC:%.cpp=$(OBJDIR)/%.o)
 DEP = $(SRC:%.cpp=$(DEPDIR)/%.d)

@@ -9,17 +9,17 @@
 	//DeltaTime
 	//FPS Counter
 
--Big refacto
-	-VAO/Program/Shaders
+-Big refacto -> On Verra...
+	-VAO/Program/Shaders -> Bouarf, pour les bonus ...
 //Screen size
-	-Get real screen size / Set viewport
+	-Get real screen size / Set viewport -> Franchement mec c'est vite fait ...
 
-(-Portability)
+(-Portability) -> Tant pis...
 
 BONUS:
 
 -Projection
-	-Matrices
+	//Matrices
 -Camera (move / rotate)
 -Particles emitter
 

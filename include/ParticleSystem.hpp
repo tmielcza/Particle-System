@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:11:08 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/10 20:30:59 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/11 17:12:23 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -19,6 +19,7 @@
 # include "GPUContext.hpp"
 # include "GLProgram.hpp"
 # include "GLVAO.hpp"
+# include "Camera.hpp"
 
 struct Vector4
 {
@@ -60,6 +61,7 @@ private:
 	bool				run;
 	bool				hasGravity;
 	int					currentInitKernelId;
+	Camera				camera;
 
 	void	Initialize(cl::Kernel *ker);
 };
