@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/05 01:32:00 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/06 15:15:19 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/11 23:27:29 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -20,6 +20,8 @@
 #	define GLFW_INCLUDE_GLCOREARB
 # endif
 # include "GLFW/glfw3.h"
+
+# include "Matrix.hpp"
 
 class GLProgram
 {
@@ -50,6 +52,8 @@ public:
 			fprintf(stderr, "Can't set this type of parameter\n");
 			throw std::exception();
 		}
+
+	void		SetParam(std::string name, Matrix<4,4>);
 };
 
 template<> void		GLProgram::SetParam(std::string name, float *floats, int nb);

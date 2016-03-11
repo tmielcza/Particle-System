@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 22:54:14 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/10 00:34:49 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/11 23:42:55 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -51,6 +51,8 @@ public:
 	std::vector<cl::Device> const	&getCLDevices();
 	GLFWwindow			*getGLFWContext();
 	void				getCursorPos(double *x, double *y);
+	float				getX(void) {return this->width;}
+	float				getY(void) {return this->height;}
 };
 
 #endif

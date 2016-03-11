@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:41:07 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/10 21:00:11 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/11 23:44:05 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -31,7 +31,8 @@ ParticleSystem::ParticleSystem(GPUContext &context, int size) :
 	vao(new GLVAO(size, this->glBuff)),
 	gravityCenter(0, 0, 0, 1),
 	run(false),
-	hasGravity(true)
+	hasGravity(true),
+	camera(Matrix<4,4>::Perspective(2.f, context.getX() / context.getY(), 0.f, 100.f))
 {
 	if (size <= 0 || size > 3e6)
 	{
@@ -109,6 +110,7 @@ void		ParticleSystem::ComputeParticles(void)
 void		ParticleSystem::RenderParticles(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	this->glProgram->SetParam("proj", this->camera.GetMatrix());
 	this->vao->BindWithProgram(*this->glProgram, "pos");
 	this->glProgram->SetParam<float>("gcenter", (float *)&this->gravityCenter, 4);
 	this->vao->Draw(*this->glProgram);

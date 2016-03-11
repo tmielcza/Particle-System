@@ -1,10 +1,12 @@
 #version 400
 
+uniform mat4 proj;
+
 layout(location = 0) in vec4 pos;
 out vec4 VertexPos;
 
 void main ()
 {
-	gl_Position = pos * 0.1f;
+	gl_Position = proj * pos * 0.1f;
 	VertexPos = pos;
 }

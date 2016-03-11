@@ -8,6 +8,8 @@
 ++Time based rendering
 	//DeltaTime
 	//FPS Counter
+//Projection
+	//Matrices
 
 -Big refacto -> On Verra...
 	-VAO/Program/Shaders -> Bouarf, pour les bonus ...
@@ -18,8 +20,6 @@
 
 BONUS:
 
--Projection
-	//Matrices
 -Camera (move / rotate)
 -Particles emitter
 

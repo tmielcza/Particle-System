@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 18:25:35 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/11 19:58:35 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/11 23:20:31 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -40,15 +40,6 @@ private:
 	int					key;
 	bool				isPressed;
 };
-
-#include <Matrix.hpp>
-
-template<int X>
-void fun(int (&b)[X])
-{
-	int a = b[X - 1];
-	a = 0;
-}
 
 int		main(int ac, char **av)
 {

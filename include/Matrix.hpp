@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/11 00:17:42 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/11 19:57:55 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/11 23:31:26 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -14,31 +14,32 @@
 
 #include <cmath>
 
+/*
+template<size_t X, size_t Y>
+class BaseMatrix
+{
+	float	data[Y][X];
+
+	float	&operator()(size_t x, size_t y)
+	{
+		return (this->data[y][x]);
+	}
+};
+*/
+
 template<size_t X, size_t Y>
 class Matrix
 {
-//protected:
-
 public:
 
 	float	data[Y][X];
 
-/*
-	Matrix(const float a[Y][X])
-	{
-		for (size_t y = 0; y < Y; y++) {
-			for (size_t x = 0; x < Y; x++) {
-				this->data[y][x] = a[y][x];
-			}
-		}
-	}
-
-	Matrix()
-	{
-	}
-*/
-
 	float		&Get(size_t x, size_t y)
+	{
+		return (this->data[y][x]);
+	}
+
+	float		&operator()(size_t x, size_t y)
 	{
 		return (this->data[y][x]);
 	}
@@ -48,6 +49,7 @@ public:
 	{
 		Matrix<X, Y>	ret;
 
+		// Useless : template w/ <XX, X>, no YY
 		static_assert (X == YY, "A width must match B height.");
 		for (size_t y = 0; y < Y; y++) {
 			for (size_t x = 0; x < XX; x++) {
@@ -55,6 +57,18 @@ public:
 				for (size_t i = 0; i < X; i++) {
 					ret.Get(x, y) += this->Get(i, y) * rhs.Get(x, i);
 				}
+			}
+		}
+		return (ret);
+	}
+
+	Matrix<X, Y>	operator+(Matrix<X, Y> &rhs)
+	{
+		Matrix<X, Y>	ret;
+
+		for (size_t y = 0; y < Y; y++) {
+			for (size_t x = 0; x < X; x++) {
+				ret(x, y) += (*this)(x, y) + rhs(x, y);
 			}
 		}
 		return (ret);
@@ -91,7 +105,7 @@ public:
 		return (ret);
 	}
 
-	static Matrix<4,4>		Tanslation(float x, float y, float z)
+	static Matrix<4,4>		Translation(float x, float y, float z)
 	{
 		Matrix<4,4>	ret;
 
@@ -119,6 +133,7 @@ public:
 		float	c;
 		float	s;
 
+		// Degrees to radians ?
 		c = cos(a);
 		s = sin(a);
 		ret = Identity();
@@ -132,6 +147,18 @@ public:
 		ret.data[2][1] = y * z * (1 - c) + x * s;
 		ret.data[2][2] = (z * z) + (1 - (z * z)) * c;
 		return (ret);
+	}
+
+/*
+	static Matrix<4,4>		Rotation(float angle, Vector<3> rot)
+	{
+		return (Rotation(angle, rot(0), rot(1), rot(2)));
+	}
+*/
+
+	float const		*ToGLFloats(void)
+	{
+		return ((float const *)&this->data);
 	}
 };
 
@@ -147,6 +174,11 @@ public:
 	}
 
 	float		&Get(size_t x)
+	{
+		return (this->data[0][x]);
+	}
+
+	float		&operator()(size_t x)
 	{
 		return (this->data[0][x]);
 	}
