@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:11:08 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/11 23:17:52 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/12 01:13:45 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -43,6 +43,7 @@ public:
 	void			SetGravity(bool position);
 	void			ChangeInitForm(void);
 	float			DeltaTime(void);
+	void			Move(Vector<3> dir);
 
 private:
 	GLBuffer			*glBuff;

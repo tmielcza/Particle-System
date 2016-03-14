@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/11 00:17:42 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/11 23:31:26 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/14 16:15:33 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -68,7 +68,7 @@ public:
 
 		for (size_t y = 0; y < Y; y++) {
 			for (size_t x = 0; x < X; x++) {
-				ret(x, y) += (*this)(x, y) + rhs(x, y);
+				ret(x, y) = (*this)(x, y) + rhs(x, y);
 			}
 		}
 		return (ret);
@@ -89,12 +89,14 @@ public:
 		return (ret);
 	}
 
+#include <stdio.h>
+
 	static Matrix<X,Y>		Identity(void)
 	{
 		Matrix<X,Y>		ret;
 
 		for (size_t y = 0; y < Y; y++) {
-			for (size_t x = 0; x < Y; x++) {
+			for (size_t x = 0; x < X; x++) {
 				if (x == y) {
 					ret.data[y][x] = 1;
 				} else {
@@ -182,4 +184,11 @@ public:
 	{
 		return (this->data[0][x]);
 	}
+
+	Matrix<1, X>	&operator=(Matrix<1, X> const &rhs)
+	{
+		std::copy(&rhs.data[0][0], &rhs.data[0][0] + sizeof(rhs.data), &this->data[0][0]);
+		return (*this);
+	}
+
 };

@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:41:07 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/11 23:44:05 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/12 01:11:51 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -166,4 +166,9 @@ float		ParticleSystem::DeltaTime(void)
 	tmp = std::chrono::duration_cast<std::chrono::microseconds>(time - last).count() / 1e6f;
 	last = time;
 	return (tmp);
+}
+
+void		ParticleSystem::Move(Vector<3> dir)
+{
+	this->camera.Move(dir);
 }
