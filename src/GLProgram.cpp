@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/05 02:18:42 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/11 23:29:22 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/16 00:23:40 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -101,5 +101,5 @@ void		GLProgram::SetParam(std::string name, float *floats, int nb)
 void		GLProgram::SetParam(std::string name, Matrix<4,4> mat)
 {
 	GLint loc = glGetUniformLocation(this->program, name.c_str());
-	glProgramUniformMatrix4fv(this->program, loc, 1, GL_FALSE, mat.ToGLFloats());
+	glProgramUniformMatrix4fv(this->program, loc, 1, GL_TRUE, mat.ToGLFloats());
 }

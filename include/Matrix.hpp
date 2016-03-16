@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/11 00:17:42 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/14 16:15:33 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/16 01:33:17 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -44,13 +44,11 @@ public:
 		return (this->data[y][x]);
 	}
 
-	template<size_t XX, size_t YY>
-	Matrix<X, Y>	operator*(Matrix<XX, YY> &rhs)
+	template<size_t XX>
+	Matrix<X, Y>	operator*(Matrix<XX, X> &rhs)
 	{
 		Matrix<X, Y>	ret;
 
-		// Useless : template w/ <XX, X>, no YY
-		static_assert (X == YY, "A width must match B height.");
 		for (size_t y = 0; y < Y; y++) {
 			for (size_t x = 0; x < XX; x++) {
 				ret.Get(x, y) = 0.0f;
@@ -77,19 +75,33 @@ public:
 	static Matrix<4,4>		Perspective(float fov, float aspect, float znear, float zfar)
 	{
 		Matrix<4,4>	ret = Identity();
+
+//*
 		float		cota2;
 
 		// Degrees to radians ?
 		cota2 = 1.0f / tan((fov) / 2);
-		ret.data[0][0] = (1.0f / aspect) * cota2;
+		ret.data[0][0] = cota2 / aspect;
 		ret.data[1][1] = cota2;
-		ret.data[2][2] = zfar / (zfar - znear);
+//		ret.data[2][2] = zfar / (zfar - znear);
+		ret.data[2][2] = (znear + zfar) / (znear - zfar);
+		ret.data[3][2] = -1.0f;
+		ret.data[2][3] = ((2 * zfar * znear) / (znear - zfar));
+//		ret.data[3][2] = ((zfar * znear) / (zfar - znear));
+//*/
+
+/*
+		float ymax = znear * tan(fov);
+		float xmax = ymax * aspect;
+		ret.data[0][0] = (2.0f * znear) / (2.0f * xmax);
+		ret.data[1][1] = (2.0f * znear) / (2.0f * ymax);
+		ret.data[2][2] = (-zfar - znear) / (zfar - znear);
 		ret.data[2][3] = -1.0f;
-		ret.data[3][2] = ((zfar * znear) / (zfar - znear));
+		ret.data[3][2] = (-(2.0f * znear) * zfar) / (zfar - znear);
+//*/
+
 		return (ret);
 	}
-
-#include <stdio.h>
 
 	static Matrix<X,Y>		Identity(void)
 	{
@@ -187,7 +199,7 @@ public:
 
 	Matrix<1, X>	&operator=(Matrix<1, X> const &rhs)
 	{
-		std::copy(&rhs.data[0][0], &rhs.data[0][0] + sizeof(rhs.data), &this->data[0][0]);
+		std::copy(&rhs.data[0][0], &rhs.data[0][0] + X, &this->data[0][0]);
 		return (*this);
 	}
 

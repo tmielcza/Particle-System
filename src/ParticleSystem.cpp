@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:41:07 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/12 01:11:51 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/16 01:17:08 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -32,7 +32,9 @@ ParticleSystem::ParticleSystem(GPUContext &context, int size) :
 	gravityCenter(0, 0, 0, 1),
 	run(false),
 	hasGravity(true),
-	camera(Matrix<4,4>::Perspective(2.f, context.getX() / context.getY(), 0.f, 100.f))
+	// Huh.
+	camera(Matrix<4,4>::Perspective(60.f * 3.14 / 180.f, context.getX() / context.getY(), 0.f, 1000.f),
+		   Vector<3>(0.f, 0.f, 0.f))
 {
 	if (size <= 0 || size > 3e6)
 	{
@@ -94,7 +96,7 @@ void		ParticleSystem::ComputeParticles(void)
 	if (this->run == false)
 		return ;
 	this->queue.enqueueAcquireGLObjects(&test, NULL, NULL);
-	// Chopper les kernels a l'avance
+	// Chopper les kernels a l'avance plz
 	if (this->hasGravity) {
 		auto update = cl::make_kernel<cl_int, cl::BufferGL, cl::BufferGL, cl_float4>(cl::Kernel(this->program,"update"));
 		event = update(cl::EnqueueArgs(this->queue, cl::NDRange(this->size)), this->size, *this->clBuff, *this->clBuffVelocities, f);
@@ -171,4 +173,14 @@ float		ParticleSystem::DeltaTime(void)
 void		ParticleSystem::Move(Vector<3> dir)
 {
 	this->camera.Move(dir);
+}
+
+void		ParticleSystem::CameraPitch(float a)
+{
+	this->camera.Pitch(a);
+}
+
+void		ParticleSystem::CameraYaw(float a)
+{
+	this->camera.Yaw(a);
 }

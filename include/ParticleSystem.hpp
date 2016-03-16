@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:11:08 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/12 01:13:45 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/16 01:04:22 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -44,6 +44,8 @@ public:
 	void			ChangeInitForm(void);
 	float			DeltaTime(void);
 	void			Move(Vector<3> dir);
+	void			CameraPitch(float a);
+	void			CameraYaw(float a);
 
 private:
 	GLBuffer			*glBuff;

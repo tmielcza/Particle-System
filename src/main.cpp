@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 18:25:35 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/14 16:38:37 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/16 01:16:58 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -57,50 +57,51 @@ int		main(int ac, char **av)
 	context = new GPUContext(1920, 1080);
 	Key		keyPause(*context, GLFW_KEY_SPACE);
 	Key		keyChangeForm(*context, GLFW_KEY_F);
-	// Overflow ??
 	Key		keySetGravity(*context, GLFW_KEY_G);
 	float	delta;
 	size = atoi(av[1]);
+
+	// USE "USERPOINTER" WITH GLFW FOR CALLBACKS !!!!!!
+
 	try {
 		auto ps = ParticleSystem(*context, size);
 		while (glfwGetKey(context->getGLFWContext(), GLFW_KEY_ESCAPE) == GLFW_RELEASE) {
+
 			glfwPollEvents();
 			delta = ps.DeltaTime();
 			glfwSetWindowTitle(context->getGLFWContext(), std::to_string(1.f / delta).c_str());
 			if (keyPause.Pressed()) {
 				isLaunched = true;
 				ps.OnOff();
-			}
-
-			if (keyChangeForm.Pressed() && !isLaunched) {
+			} if (keyChangeForm.Pressed() && !isLaunched) {
 				ps.ChangeInitForm();
-			}
-
-			printf("lO\n");
-			(void)hasGravity;
-
-			if (keySetGravity.Pressed()) {
+			} if (keySetGravity.Pressed()) {
 				hasGravity = !hasGravity;
 				ps.SetGravity(hasGravity);
+
+			} if (glfwGetKey(context->getGLFWContext(), GLFW_KEY_W) == GLFW_PRESS) {
+				ps.Move(Vector<3>(0.0f, 0.0f, 0.01f));
+			} if (glfwGetKey(context->getGLFWContext(), GLFW_KEY_S) == GLFW_PRESS) {
+				ps.Move(Vector<3>(0.0f, 0.0f, -0.01f));
+			} if (glfwGetKey(context->getGLFWContext(), GLFW_KEY_A) == GLFW_PRESS) {
+				ps.Move(Vector<3>(-0.01f, 0.0f, 0.0f));
+			} if (glfwGetKey(context->getGLFWContext(), GLFW_KEY_D) == GLFW_PRESS) {
+				ps.Move(Vector<3>(0.01f, 0.0f, 0.0f));
 			}
 
+			if (glfwGetMouseButton(context->getGLFWContext(), 1) == GLFW_PRESS) {
+				context->getCursorPos(&x, &y);
+				ps.CameraPitch(y * 4.f);
+				ps.CameraYaw(x * 4.f);
+			} else {ps.CameraPitch(0); ps.CameraYaw(0);}
 
-			//Beurk
-			if (glfwGetKey(context->getGLFWContext(), GLFW_KEY_W) == GLFW_PRESS) {
-				ps.Move(Vector<3>(0.0f, 0.0f, 0.1f));
-			}
-			printf("ZU\n");
 			context->getGLFWContext();
-			printf("%p \n", context);
-
 			ps.ComputeParticles();
 			ps.RenderParticles();
-			printf("lu\n");
 			if (glfwGetMouseButton(context->getGLFWContext(), 0) == GLFW_PRESS) {
 				context->getCursorPos(&x, &y);
 				ps.SetGravityCenter(x, y, 0.f);
 			}
-			printf("la\n");
 		}
 	}
 	catch (std::exception &e)
