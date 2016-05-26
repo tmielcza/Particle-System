@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/05 02:18:42 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/16 00:23:40 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/05/26 19:31:00 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -44,24 +44,39 @@ GLuint	GLProgram::CompileShader(std::string shader, GLuint shaderType)
 	return (shaderId);
 }
 
-GLProgram::GLProgram(std::string vertex, std::string fragment) :
-	vertShader(CompileShader(vertex, GL_VERTEX_SHADER)),
-	fragShader(CompileShader(fragment, GL_FRAGMENT_SHADER)),
+GLProgram::GLProgram(std::string vertex, std::string fragment, std::string geometry) :
+//	vertShader(CompileShader(vertex, GL_VERTEX_SHADER)),
+//	fragShader(CompileShader(fragment, GL_FRAGMENT_SHADER)),
+//	fragShader(CompileShader(fragment, GL_FRAGMENT_SHADER)),
 	program(glCreateProgram())
 {
-	glAttachShader(this->program, this->vertShader);
-	glAttachShader(this->program, this->fragShader);
+	GLuint vert = CompileShader(vertex, GL_VERTEX_SHADER);
+	GLuint frag = CompileShader(fragment, GL_FRAGMENT_SHADER);
+	GLuint geo;
+	glAttachShader(this->program, vert);
+	glAttachShader(this->program, frag);
+	this->shadersIds.push_back(vert);
+	this->shadersIds.push_back(frag);
+	if (!geometry.empty()) {
+		geo = CompileShader(geometry, GL_GEOMETRY_SHADER);
+		glAttachShader(this->program, geo);
+		this->shadersIds.push_back(geo);
+	}
 	glLinkProgram(this->program);
 	// Maybe check if linking worked ? Nope ? Okay...
-	glDetachShader(this->program, this->vertShader);
-	glDetachShader(this->program, this->fragShader);
+	glDetachShader(this->program, vert);
+	glDetachShader(this->program, frag);
+	if (!geometry.empty()) {
+		glDetachShader(this->program, geo);
+	}
 }
 
 GLProgram::~GLProgram()
 {
 	glDeleteProgram(this->program);
-	glDeleteShader(this->vertShader);
-	glDeleteShader(this->fragShader);
+	for (auto shaderId : this->shadersIds) {
+		glDeleteShader(shaderId);
+	}
 }
 
 void		GLProgram::Bind(void)

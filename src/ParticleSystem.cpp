@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:41:07 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/16 01:17:08 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/05/26 20:09:15 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -33,7 +33,7 @@ ParticleSystem::ParticleSystem(GPUContext &context, int size) :
 	run(false),
 	hasGravity(true),
 	// Huh.
-	camera(Matrix<4,4>::Perspective(60.f * 3.14 / 180.f, context.getX() / context.getY(), 0.f, 1000.f),
+	camera(Matrix<4,4>::Perspective(30.f * 3.14 / 180.f, context.getX() / context.getY(), 0.f, 1000.f),
 		   Vector<3>(0.f, 0.f, 0.f))
 {
 	if (size <= 0 || size > 3e6)
@@ -44,6 +44,7 @@ ParticleSystem::ParticleSystem(GPUContext &context, int size) :
 	std::string source = this->ReadFile("resources/particles.cl");
 	std::string vert = this->ReadFile("resources/point_vert.gl");
 	std::string frag = this->ReadFile("resources/point_frag.gl");
+	std::string geo = this->ReadFile("resources/point_geo.gl");
 	cl_int		err;
 	std::string	err_str;
 
@@ -69,7 +70,7 @@ ParticleSystem::ParticleSystem(GPUContext &context, int size) :
 	this->kernelInitCube = cl::Kernel(this->program, "cube", &err);
 	CheckCLErrorStatus(err, "Can't get CL Kernel.");
 
-	this->glProgram = new GLProgram(vert, frag);
+	this->glProgram = new GLProgram(vert, frag, geo);
 
 	Initialize(&this->kernelInitCube);
 }

@@ -1,0 +1,51 @@
+#version 400
+
+layout (points) in;
+//layout (points, max_vertices = 1) out;
+layout (triangle_strip, max_vertices = 4) out;
+
+//uniform mat4 proj;
+
+//vec4 gl_Position;
+//float gl_PointSize;
+//float gl_ClipDistance[];
+
+//out vec2 Vertex_UV;
+
+in vec4 VertexPos[];
+out vec4 VPos;
+
+void main ()
+{
+	vec4 P = gl_in[0].gl_Position;
+	VPos = VertexPos[0];
+
+	if (P.x < -1.0 || P.y < -1.0
+		|| P.x > 1.0 || P.y > 1.0) {
+		return;
+	}
+
+	// a: left-bottom
+	gl_Position = P + vec4(0, 0, 0, 0);
+//	Vertex_UV = vec2(0.0, 0.0);
+	EmitVertex();
+
+	//*
+	// b: left-top
+	gl_Position = P + vec4(0, 0.001, 0, 0);
+//	Vertex_UV = vec2(0.0, 1.0);
+	EmitVertex();
+
+	// d: right-bottom
+	gl_Position = P + vec4(0.001, 0, 0, 0);
+//	Vertex_UV = vec2(1.0, 0.0);
+	EmitVertex();
+
+	// c: right-top
+	gl_Position = P + vec4(0.001, 0.001, 0, 0);
+//	Vertex_UV = vec2(1.0, 1.0);
+	EmitVertex();
+	//*/
+
+	EndPrimitive();  
+}

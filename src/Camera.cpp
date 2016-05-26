@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/11 17:01:23 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/16 01:36:14 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/03/17 23:58:28 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -50,8 +50,8 @@ Matrix<4,4>		Camera::GetMatrix(void)
 	Matrix<4,4>	ret;
 
 	ret = Matrix<4,4>::Identity();
-	ret = Matrix<4,4>::Rotation(this->rotation(0), 1, 0, 0) * ret;
 	ret = Matrix<4,4>::Rotation(this->rotation(1), 0, 1, 0) * ret;
+	ret = Matrix<4,4>::Rotation(this->rotation(0), 1, 0, 0) * ret;
 	ret = Matrix<4,4>::Translation(this->position(0), this->position(1), this->position(2)) * ret;
 
 	ret = this->projection * ret;

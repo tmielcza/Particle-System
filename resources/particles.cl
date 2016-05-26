@@ -35,6 +35,11 @@ void	update(const int num, global float4 * const restrict positions,
 	float4 vel = velocities[idx];
 	float4 gravity = center - positions[idx];
 	float4 acceleration = 1.0f / length(gravity) * normalize(gravity);
+
+	float4 t = (2.0f - length(positions[idx])) * positions[idx];
+	normalize(t);
+	acceleration += t * 1.0f;
+
 	positions[idx] += vel * 0.01f;
 	velocities[idx] = 0.99f * vel + acceleration * 0.01f;
 }
@@ -45,6 +50,24 @@ void	update_no_g(const int num, global float4 * const restrict positions,
 {
 	unsigned int idx = get_global_id(0);
 	float4 vel = velocities[idx];
-	positions[idx] += vel * 0.01f;
+
+// Something's going wrong here ...
+
+//	positions[idx].w = 0.0f;
+	float4 ve = positions[idx] / length(positions[idx]);
+//	float4 ve = normalize(positions[idx]);
+	ve * 0.005f;
+	ve.w = 1.0f;
+	float4 t = ve - positions[idx];
+	normalize(t);
+//	t *= 20.5f;
+	t.w = 0.0;
+	float4 a = t * 0.001f;
+	a.w = 0.0f;
+//	a = -positions[idx];
+
+//	positions[idx] = a;
+	positions[idx] += vel * 0.01f ;
+//	positions[idx] += vel * 0.01f;
 	velocities[idx] = 0.99f * vel;
 }
