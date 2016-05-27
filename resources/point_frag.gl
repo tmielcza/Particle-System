@@ -11,7 +11,7 @@ vec3 pal( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d )
 
 void main () {
 
-	float coef = length(VPos - gcenter) * 2.f;
+	float coef = length(VPos - gcenter);// * 0.9f;
 	coef = clamp(coef, 0.0f, 1.0f);
 	vec3 c = pal(coef, vec3(0.8,0.8,0.8), vec3(0.8,0.8,0.8), vec3(0.2,0.4,0.4), vec3(0.0,0.0,0.2));
 	color = vec4(c, 0.2f);

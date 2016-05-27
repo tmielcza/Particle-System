@@ -7,6 +7,7 @@ out vec4 VertexPos;
 
 void main ()
 {
-	gl_Position = proj * pos * 0.1f;
-	VertexPos = pos;
+	vec4 rpos = pos / pos.w;
+	gl_Position = proj * rpos * 0.1f;
+	VertexPos = rpos;
 }

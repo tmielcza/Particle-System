@@ -20,10 +20,12 @@ void main ()
 	vec4 P = gl_in[0].gl_Position;
 	VPos = VertexPos[0];
 
+	/*
 	if (P.x < -1.0 || P.y < -1.0
 		|| P.x > 1.0 || P.y > 1.0) {
 		return;
 	}
+	*/
 
 	// a: left-bottom
 	gl_Position = P + vec4(0, 0, 0, 0);
@@ -32,17 +34,17 @@ void main ()
 
 	//*
 	// b: left-top
-	gl_Position = P + vec4(0, 0.001, 0, 0);
+	gl_Position = P + vec4(0, 0.001, 0, 0); // * P.w * 2;
 //	Vertex_UV = vec2(0.0, 1.0);
 	EmitVertex();
 
 	// d: right-bottom
-	gl_Position = P + vec4(0.001, 0, 0, 0);
+	gl_Position = P + vec4(0.001, 0, 0, 0); // * P.w * 2;
 //	Vertex_UV = vec2(1.0, 0.0);
 	EmitVertex();
 
 	// c: right-top
-	gl_Position = P + vec4(0.001, 0.001, 0, 0);
+	gl_Position = P + vec4(0.001, 0.001, 0, 0); // * P.w * 2;
 //	Vertex_UV = vec2(1.0, 1.0);
 	EmitVertex();
 	//*/
