@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/11 00:17:42 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/16 01:33:17 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/05/27 19:14:51 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -201,6 +201,36 @@ public:
 	{
 		std::copy(&rhs.data[0][0], &rhs.data[0][0] + X, &this->data[0][0]);
 		return (*this);
+	}
+
+	static Vector<4>	&Normalize(Vector<4>& vec)
+	{
+		auto homothecy = vec.data[3][0];
+
+		for (auto i = 0; i < 3; i++) {
+			vec.data[i][0] /= homothecy;
+		}
+		return vec;
+	}
+
+	float			Length(void)
+	{
+		float	sum = 0;
+		for (auto i = 0u; i < X; i++) {
+			auto val = this->Get(i);
+			sum += val * val;
+		}
+		return std::sqrt(sum);
+	}
+
+	Vector<X>	operator-(Vector<X> &rhs)
+	{
+		Vector<X>	ret;
+
+		for (auto x = 0u; x < X; x++) {
+			ret(x) = (*this)(x) - rhs(x);
+		}
+		return (ret);
 	}
 
 };

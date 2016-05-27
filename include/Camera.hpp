@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/11 15:43:21 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/11 23:45:00 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/05/27 14:33:52 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -30,5 +30,6 @@ public:
 	void		Pitch(float a);
 	void		Yaw(float a);
 	void		Move(Vector<3> vector);
-	Matrix<4,4>		GetMatrix(void);
+	Matrix<4,4>	GetMatrix(void);
+	Vector<3>&	GetPosition(void);
 };

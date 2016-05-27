@@ -1,16 +1,9 @@
 #version 400
 
 layout (points) in;
-//layout (points, max_vertices = 1) out;
 layout (triangle_strip, max_vertices = 4) out;
 
-//uniform mat4 proj;
-
-//vec4 gl_Position;
-//float gl_PointSize;
-//float gl_ClipDistance[];
-
-//out vec2 Vertex_UV;
+uniform vec3 campos;
 
 in vec4 VertexPos[];
 out vec4 VPos;

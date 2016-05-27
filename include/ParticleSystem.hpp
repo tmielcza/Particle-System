@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:11:08 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/16 01:04:22 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/05/27 20:52:33 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -46,6 +46,7 @@ public:
 	void			Move(Vector<3> dir);
 	void			CameraPitch(float a);
 	void			CameraYaw(float a);
+	void			SortParticles(std::vector<cl_float4>& buff, std::vector<cl_float4>& buffVeloc);
 
 private:
 	GLBuffer			*glBuff;

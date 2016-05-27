@@ -6,7 +6,7 @@
 #    By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/01/19 20:57:11 by tmielcza          #+#    #+#              #
-#    Updated: 2016/03/11 17:12:37 by tmielcza         ###   ########.fr        #
+#    Updated: 2016/05/27 20:41:08 by tmielcza         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -29,7 +29,7 @@ LIBS = $(addprefix -L,$(libdir)) $(addprefix -l,$(libs))
 FRAMEWORKS = $(addprefix -framework ,$(frameworks))
 FLAGS = -Wall -Wextra -Werror -std=c++11
 FLAGS += -pedantic-errors #-Weverything
-#FLAGS += -O3 -march=native
+FLAGS += -O3 -march=native
 FLAGS += -g -DDEBUG=ON # Debug
 CXXFLAGS = $(FLAGS) $(INCLUDE)
 

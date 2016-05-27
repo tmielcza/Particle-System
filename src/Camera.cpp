@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/11 17:01:23 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/17 23:58:28 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/05/27 14:33:45 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -58,4 +58,9 @@ Matrix<4,4>		Camera::GetMatrix(void)
 
 	return (ret);
 
+}
+
+Vector<3>&		Camera::GetPosition(void)
+{
+	return this->position;
 }
