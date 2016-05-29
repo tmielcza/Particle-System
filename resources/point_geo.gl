@@ -7,6 +7,7 @@ uniform vec3 campos;
 
 in vec4 VertexPos[];
 out vec4 VPos;
+out vec2 UVPos;
 
 void main ()
 {
@@ -22,23 +23,23 @@ void main ()
 
 	// a: left-bottom
 	gl_Position = P + vec4(0, 0, 0, 0);
-//	Vertex_UV = vec2(0.0, 0.0);
+	UVPos = vec2(0.0, 0.0);
 	EmitVertex();
 
 	//*
 	// b: left-top
-	gl_Position = P + vec4(0, 0.001, 0, 0); // * P.w * 2;
-//	Vertex_UV = vec2(0.0, 1.0);
+	gl_Position = P + vec4(0, 0.003, 0, 0); // * P.w * 2;
+	UVPos = vec2(0.0, 1.0);
 	EmitVertex();
 
 	// d: right-bottom
-	gl_Position = P + vec4(0.001, 0, 0, 0); // * P.w * 2;
-//	Vertex_UV = vec2(1.0, 0.0);
+	gl_Position = P + vec4(0.003, 0, 0, 0); // * P.w * 2;
+	UVPos = vec2(1.0, 0.0);
 	EmitVertex();
 
 	// c: right-top
-	gl_Position = P + vec4(0.001, 0.001, 0, 0); // * P.w * 2;
-//	Vertex_UV = vec2(1.0, 1.0);
+	gl_Position = P + vec4(0.003, 0.003, 0, 0); // * P.w * 2;
+	UVPos = vec2(1.0, 1.0);
 	EmitVertex();
 	//*/
 

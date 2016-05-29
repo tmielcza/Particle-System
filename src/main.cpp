@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 18:25:35 by tmielcza          #+#    #+#             //
-//   Updated: 2016/03/16 01:16:58 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/05/29 15:58:56 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -100,7 +100,7 @@ int		main(int ac, char **av)
 			ps.RenderParticles();
 			if (glfwGetMouseButton(context->getGLFWContext(), 0) == GLFW_PRESS) {
 				context->getCursorPos(&x, &y);
-				ps.SetGravityCenter(x, y, 0.f);
+				ps.SetGravityCenter(x * 5.0f, y * 5.0f, 0.f);
 			}
 		}
 	}

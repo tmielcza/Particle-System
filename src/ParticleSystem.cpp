@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:41:07 by tmielcza          #+#    #+#             //
-//   Updated: 2016/05/27 20:58:29 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/05/29 17:30:18 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -33,8 +33,8 @@ ParticleSystem::ParticleSystem(GPUContext &context, int size) :
 	run(false),
 	hasGravity(true),
 	// Huh.
-	camera(Matrix<4,4>::Perspective(30.f * 3.14 / 180.f, context.getX() / context.getY(), 0.001f, 1000.f),
-		   Vector<3>(0.f, 0.f, 0.f))
+	camera(Matrix<4,4>::Perspective(30.f * 3.14 / 180.f, context.getX() / context.getY(), 0.f, 1000.f),
+		   Vector<3>(0.f, 0.f, -10.f))
 {
 	if (size <= 0 || size > 3e6)
 	{
@@ -107,6 +107,7 @@ void		ParticleSystem::ComputeParticles(void)
 	}
 	event.wait();
 
+	/*
 	std::vector<cl_float4>	buff(this->size);
 	std::vector<cl_float4>	buffVeloc(this->size);
 	cl::copy(this->queue, *this->clBuff, buff.begin(), buff.end());
@@ -114,6 +115,7 @@ void		ParticleSystem::ComputeParticles(void)
 	this->SortParticles(buff, buffVeloc);
 	cl::copy(this->queue, buff.begin(), buff.end(), *this->clBuff);
 	cl::copy(this->queue, buffVeloc.begin(), buffVeloc.end(), *this->clBuffVelocities);
+//	*/
 
 	this->queue.enqueueReleaseGLObjects(&test, NULL, NULL);
 	this->queue.flush();
@@ -126,6 +128,9 @@ void		ParticleSystem::RenderParticles(void)
 	this->vao->BindWithProgram(*this->glProgram, "pos");
 	this->glProgram->SetParam<float>("gcenter", (float *)&this->gravityCenter, 4);
 	this->glProgram->SetParam<float>("campos", (float *)&this->camera.GetPosition(), 3);
+	float time = std::chrono::duration_cast<std::chrono::duration<float>>(this->clock.now().time_since_epoch()).count();
+//	printf("GROSSE BITE: %f\n", time);
+	this->glProgram->SetParam<float>("time", &time, 1);
 	this->vao->Draw(*this->glProgram);
 	glfwSwapBuffers(this->context.getGLFWContext());
 	glFlush();
@@ -248,6 +253,7 @@ void		ParticleSystem::SortParticles(
 		auto vec = *(Vector<3> *)&buff[i] - this->camera.GetPosition();
 		auto dist = vec.Length();
 		dist = dist * 0xFFFFFFFF / 1000.0f;
+		dist = 0xFFFFFFFF - dist;
 		to_sort[i] = SortableParticle((int32_t)dist, i);
 	}
 

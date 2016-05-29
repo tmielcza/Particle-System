@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/03 22:33:08 by tmielcza          #+#    #+#             //
-//   Updated: 2016/05/27 20:38:15 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/05/29 15:48:49 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -83,10 +83,10 @@ GPUContext::GPUContext(int width, int height) :
 
 // Ou tu veux que je foute ca ?
 	glClearColor(0, 0, 0, 0);
-//	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 	glPointSize(2.0f);
-	glEnable (GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Transparency
+//	glEnable (GL_BLEND);
+//	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Transparency
 //	glBlendFunc (GL_SRC_ALPHA, GL_ONE); // Additive
 }
 

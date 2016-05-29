@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/04 15:11:08 by tmielcza          #+#    #+#             //
-//   Updated: 2016/05/27 20:52:33 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/05/29 16:49:07 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -66,6 +66,7 @@ private:
 	bool				hasGravity;
 	int					currentInitKernelId;
 	Camera				camera;
+	std::chrono::high_resolution_clock	clock;
 
 	void	Initialize(cl::Kernel *ker);
 };

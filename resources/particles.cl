@@ -40,8 +40,8 @@ void	update(const int num, global float4 * const restrict positions,
 	normalize(t);
 	acceleration += t * 1.0f;
 
-	positions[idx] += vel * 0.01f;
-	velocities[idx] = 0.99f * vel + acceleration * 0.01f;
+	positions[idx] += vel * 0.011f;
+	velocities[idx] = 0.995f * vel + acceleration * 0.009f;
 }
 
 kernel

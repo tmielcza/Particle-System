@@ -1,7 +1,10 @@
 #version 400
 
 uniform vec4 gcenter;
+uniform float time;
+
 in vec4 VPos;
+in vec2 UVPos;
 out vec4 color;
 
 vec3 pal( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d )
@@ -9,10 +12,32 @@ vec3 pal( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d )
     return a + b*cos( 6.28318*(c*t+d) );
 }
 
-void main () {
+vec4 hex_color(int r, int g, int b, int a)
+{
+	return (vec4(r / 255.0, g / 255.0, b / 255.0, a / 255.0));
+}
 
-	float coef = length(VPos - gcenter);// * 0.9f;
-	coef = clamp(coef, 0.0f, 1.0f);
-	vec3 c = pal(coef, vec3(0.8,0.8,0.8), vec3(0.8,0.8,0.8), vec3(0.2,0.4,0.4), vec3(0.0,0.0,0.2));
-	color = vec4(c, 0.8f);
+void main()
+{
+	float	c_dst = length(VPos - gcenter);
+	float	coef = clamp(c_dst, 0.0f, 1.0f);
+	vec3	c = pal(coef, vec3(0.8,0.8,0.8), vec3(0.8,0.8,0.8), vec3(0.2,0.4,0.4), vec3(0.0,0.2,0.0));
+
+	float	rtime = mod(time, 1.0f);
+	float	branches = 5;
+	float	PI = 3.14159265358979323846264;
+	float	radius = 0.42;
+	float	a = cos(rtime * PI * 2) * 0.5;			// Rotation angle
+	vec2	pos = (UVPos - vec2(0.5, 0.5));
+	pos *= mat2(cos(a), -sin(a), sin(a), cos(a));	// Rotation
+	float	truc = atan(pos.x / pos.y) * branches;	// Position on circle
+	if (pos.y < 0)
+		truc += mod(branches, 2.0) * PI;			// Symmetry
+	float	dst = length(pos);
+	dst *=  (cos(truc) + 3 ) / 2;	// Curved distance
+	float	col = 1 - pow(abs(dst - radius) * 10, 2);	// Glow factor
+	color = vec4(c, 1.0f);
+	color = color * (col);
+	if (color.a < 0.7)
+		discard;
 }

@@ -6,7 +6,7 @@
 //   By: tmielcza <marvin@42.fr>                    +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2016/03/05 02:18:42 by tmielcza          #+#    #+#             //
-//   Updated: 2016/05/26 19:31:00 by tmielcza         ###   ########.fr       //
+//   Updated: 2016/05/29 17:31:33 by tmielcza         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -105,6 +105,9 @@ void		GLProgram::SetParam(std::string name, float *floats, int nb)
 	GLint loc = glGetUniformLocation(this->program, name.c_str());
 	switch (nb)
 	{
+	case 1:
+		glProgramUniform1fv(this->program, loc, 1, floats);
+		break ;
 	case 4:
 		glProgramUniform4fv(this->program, loc, 1, floats);
 		break ;
